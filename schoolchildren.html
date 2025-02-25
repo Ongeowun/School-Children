@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>School Children Delivery</title>
+        <link rel="stylesheet" type="text/css" href="schoolchildren.css">
+        <meta charset="UTF-8">
+        <meta name="description" content="School Children Delivery">
+        <meta name="keywords" content="HTML, CSS, JavaScript">
+        <meta name="author" content="Steven">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <nav>
+            <h2>SCHOOL NAME</h2>
+            <h4>CLASS</h4>
+            <h4>CLASS TEACHER</h4>
+            <h4>DRIVERS NAME</h4>
+            <h4>VEHICLE TYPE</h4>
+            <label></label>
+            <input type="text" id="studentInputButton"></input>
+            <button class="searchStudent">Search Student</button>
+            <input type="text" id="teacherInputButton"></input>
+            <button class="searchTeacher">Search Teacher</button>
+            <p class="displaySearchedName"></p>
+        </nav>
+        <button class="hidingButton" data-id="hidden-button">
+            <form action="submit" method="post" class="info-form">
+                <div>
+                    <h3 id="studentDetails">ENTER STUDENTS DETAILS</h3>
+                    <p>Enter First Names</p>
+                    <input type="text" id="firstName" required></input>
+                    <p id="parLastName">Enter Last Names</p>
+                    <input type="text" id="lastName" required></input>
+                    <p id="parClass">Enter the class</p>
+                    <input type="text" id="studentsClass" required></input>
+                </div>
+                <div>
+                    <h3 id="parentsDetails">ENTER PARENTS DETAILS</h3>
+                    <p id="firstNameParents">Enter First Names</p>
+                    <input type="text" id="parentsFirstName" required></input>
+                    <p id="lastNameParents">Enter Last Names</p>
+                    <input type="text" id="parentsSecondName" required></input>
+                    <p id="contactFirstParent">Enter Parents Telephone contact</p>
+                    <input type="text" id="parentsContacts" required></input>
+                    <p id="emailFirstParent">Enter Parents email</p>
+                    <input type="email" id="parentsemails" required></input>
+                    <p id="ParentsLocation">Enter Location</p>
+                    <input type="text" id="parentsLocations" required></input>
+                </div>
+    
+                <div>
+                    <h3 id="secondParentsDetails">ENTER SECOND PARENTS DETAILS</h3>
+                    <p>Enter First Names</p>
+                    <input type="text" id="SecondParentFirstName" required></input>
+                    <p id="ParentsSecondName">Enter Last Names</p>
+                    <input type="text" id="SecondParentSecondName" required></input>
+                    <p id="ContactsLastParent">Enter Parents Telephone contact</p>
+                    <input type="number" id="SecondparentContacts" required></input>
+                    <p id="emailLastParent">Enter Parents email</p>
+                    <input type="email" id="SecondParentEmail" reqiured></input>
+                    <p id="LastParentLocation">Enter Location</p>
+                    <input type="location" id="SecondParentLocation" required></input>
+                </div>
+            </form>
+            <div class = "PickUpfromSchool">
+                <button class="pickUpchildButton">Enter Name of the Person Picking up the Child</button>
+                <input type="text" id="pickUpTheChild"></input>
+            </div>
+        </button>
+          <div class ="nameDisplay">
+              <input type ="checkbox" class="tickBox">Okello Harron</input><br>
+              <p class="alertMessage"></p>
+              <input type ="checkbox" class="tickBox">Okello Harron</input><br>
+              <p class="alertMessage"></p>
+              <input type ="checkbox" class="tickBox">Okello Harron</input><br>
+              <p class="alertMessage"></p>
+              <input type ="checkbox" class="tickBox">Okello Harron</input><br>
+              <p class="alertMessage"></p>
+              <input type ="checkbox" class="tickBox">Okello Harron</input><br>
+              <p class="alertMessage"></p>
+              <input type ="checkbox" class="tickBox">Okello Harron</input><br>
+              <p class="alertMessage"></p>
+              <input type ="checkbox" class="tickBox">Okello Harron</input><br>
+              <p class="alertMessage"></p>
+              <input type ="checkbox" class="tickBox">Okello Harron</input><br>
+              <p class="alertMessage"></p>
+              <input type ="checkbox" class="tickBox">Okello Harron</input><br>
+              <p class="alertMessage"></p>
+              <input type ="checkbox" class="tickBox">Okello Harron</input><br>
+              <p class="alertMessage"></p>
+              <input type ="checkbox" class="tickBox">Okello Harron</input><br>
+              <p class="alertMessage"></p>
+              <input type ="checkbox" class="tickBox">Okello Harron</input><br>
+              <p class="alertMessage"></p>
+              <input type ="checkbox" class="tickBox">Okello Harron</input><br>
+              <p class="alertMessage"></p>
+              <input type ="checkbox" class="tickBox">Okello Harron</input><br>
+              <p class="alertMessage"></p>
+          </div>
+    </body>
+    <script src="schoolchildren.js" type="module"></script>
+</html>

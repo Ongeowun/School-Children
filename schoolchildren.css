@@ -1,0 +1,100 @@
+
+/*pop up form for uploading students info*/
+body {
+  background-color: rgba(2, 2, 37, 0);
+}
+.info-form {
+  background-color: fdfff5;
+  border-radius: 10px;
+  box-shadow:  3px 3px  8px rgb(114, 113, 111),
+              -3px -3px  8px #ffffff;
+   -webkit-box-shadow: 3px 3px 8px rgb(114, 113, 111), -3px -3px 8px #ffffff;
+  height: 80em;
+  width: 60em;
+  position: absolute;
+  margin: 5em;
+  margin-left: 3em;
+  display: none;
+  }
+  h3, h4, h2, p {
+    font-size: 1em;
+    margin: 1em;
+    display: flex;
+    justify-content: space-between;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Oxygen', Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-
+  }
+
+p {
+    font-weight: bold;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, 'Oxygen', Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-
+}
+#firstName, #lastName, #studentsClass {
+    position: absolute;
+    border-radius: .45em;
+    width: 20em;
+    height: 2em;
+    margin-left: 2em;
+}
+#parLastName, #parClass {
+  margin-top: 2em;
+}
+#parentsDetails, #secondParentsDetails {
+  margin-top: 2em;
+}
+#parentsSecondName, #parentsFirstName, #parentsContacts, #parentsemails, #parentsLocations{
+  position: absolute;
+  border-radius: .45em;
+  margin-left: 2em;
+  margin-top: -2em;
+  width: 20em;
+  height: 2em;
+}
+#SecondParentFirstName, #SecondParentSecondName, #SecondparentContacts, #SecondParentEmail, #SecondParentLocation{
+position: absolute;
+border-radius: .45em;
+margin-left: 2em;
+margin-top: -2em;
+width: 20em;
+height: 2em;
+}
+#lastNameParents, #contactFirstParent, #emailFirstParent, #ParentsLocation {
+  margin-top: 2em;
+}
+#ParentsSecondName, #ContactsLastParent, #emailLastParent, #LastParentLocation {
+  margin-top: 2em;
+}
+#submit-Btn{
+    position: absolute;
+    margin-bottom: 20em;
+}
+.nameDisplay {
+  display: flexbox;
+  margin: 1.5em;
+  font-size: 2em;
+  justify-content: flex;
+}
+.alertMessage{
+  background: white;
+  border-radius: 10px;
+  box-shadow:  3px 3px  8px rgb(114, 113, 111),
+              -3px -3px  8px #ffffff;
+   -webkit-box-shadow: 3px 3px 8px rgb(114, 113, 111), -3px -3px 8px #ffffff;
+  height: 4em;
+  width: 19em;
+  position: absolute;
+  margin-left: 25em;
+  font-size: 0.5em;
+  display: none;
+  padding-left: 0.2em;
+}
+.nameDisplay {
+  background: white;
+  border-radius: 10px;
+  box-shadow:  3px 3px  8px rgb(114, 113, 111),
+              -3px -3px  8px #ffffff;
+   -webkit-box-shadow: 3px 3px 8px rgb(114, 113, 111), -3px -3px 8px #ffffff;
+   width: 8em;
+}
+.PickUpfromSchool {
+  margin: 1.5em;
+}
