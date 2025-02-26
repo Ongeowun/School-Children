@@ -90,6 +90,24 @@ function teacherButton(query) {
  })
 }
 })
+
+//Drop down for the form
+if (dropDown) {
+  dropDown.addEventListener('click', () => {
+    let dropDown = document.getElementsByClassName("hidingButton");
+    if (dropDown.clicked == true) {
+      dropDown.forEach(dropDown => dropDown.style.display = 'block');
+    }
+  });
+}
+
+dropDown.addEventListener('click', () => {
+  if(form.style.display === "none"){
+    form.style.display = "block"
+  } else {
+    form.style.display = "none"
+  }
+})
 /*function textMessage(){
 
   const client = twilio(accountSid, authTokenId)
