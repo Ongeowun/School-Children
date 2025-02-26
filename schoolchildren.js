@@ -7,7 +7,7 @@ let alertMessages = document.getElementsByClassName("alertMessage");
 const searchStudent = document.querySelector(".searchStudent")
 const searchTeacher = document.querySelector(".searchTeacher")
 let displaySearchedName = document.querySelector(".displaySearchedName");
-
+let pickUpTheChild = document.querySelector(".pickUpTheChild")
  
 dropDown.textContent = `Submit New Students details`
 
@@ -34,13 +34,17 @@ Array.from(tickBoxes).forEach((tickBox, index) => {
 
 //sending a text message to the parent
 function textMessage() {
+  const pickUpName = pickUpTheChild.value.trim()
+  const messageBody = pickUpName
+        ? `Your child has been dropped at home and picked up by ${pickUpName}` 
+        : 'Your child has been dropped at home'
   fetch('http://localhost:5500/send-text', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      body: 'Your child has been dropped at home',
+      body:  messageBody,
       from: '+15075563406',
       to: '+256775820129'
     })
@@ -94,20 +98,13 @@ function teacherButton(query) {
 //Drop down for the form
 if (dropDown) {
   dropDown.addEventListener('click', () => {
-    let dropDown = document.getElementsByClassName("hidingButton");
-    if (dropDown.clicked == true) {
-      dropDown.forEach(dropDown => dropDown.style.display = 'block');
+    if (form.style.display === "none") {
+      form.style.display = "block";
+    } else {
+      form.style.display = "none";
     }
   });
 }
-
-dropDown.addEventListener('click', () => {
-  if(form.style.display === "none"){
-    form.style.display = "block"
-  } else {
-    form.style.display = "none"
-  }
-})
 /*function textMessage(){
 
   const client = twilio(accountSid, authTokenId)

@@ -2,7 +2,7 @@
     "dependencies": {
         "express": "^4.21.2",
         "npm": "^11.0.0",
-        "twilio": "^5.4.3"
+        "twilio": "^5.4.5"
     },
     "name": "desktop",
     "version": "1.0.0",
