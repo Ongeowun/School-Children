@@ -1,7 +1,7 @@
 
 /*pop up form for uploading students info*/
 body {
-  background-color: rgb(201, 199, 199);
+  background-color: aliceblue;
 }
 .info-form {
   background-color: fdfff5;
@@ -16,6 +16,7 @@ body {
   margin-left: 3em;
   display: none;
   }
+
   h3, h4, h2, p {
     font-size: 1em;
     margin: 1em;
@@ -74,7 +75,7 @@ height: 2em;
   justify-content: flex;
 }
 .alertMessage{
-  background: white;
+  background: aliceblue;
   border-radius: 10px;
   box-shadow:  3px 3px  8px rgb(114, 113, 111),
               -3px -3px  8px #ffffff;
@@ -88,7 +89,7 @@ height: 2em;
   padding-left: 0.2em;
 }
 .nameDisplay {
-  background: white;
+  background: aliceblue;
   border-radius: 10px;
   box-shadow:  3px 3px  8px rgb(114, 113, 111),
               -3px -3px  8px #ffffff;

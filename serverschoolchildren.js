@@ -2,7 +2,9 @@ const twilio = require('twilio');
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const fs = require('fs');
 const http = require('http');
+const timestamp = require('timeStamp');
 
 const app = express();
 app.use(express.json());
@@ -23,6 +25,19 @@ app.post('/send-text', (req, res) => {
     to: to
   })
   .then(message => {
+    //save the details
+    const messageDetails = {
+      sid: message.sid,
+      body: body,
+      from: from,
+      to: to,
+      timestamp: timestamp
+    }
+    fs.appendFileSync('messageDetails.json', JSON.stringify(messageDetails) + '\n', err => {
+      if (err) {
+        console.log( `Error writing to file: ${err}`);
+    } ;
+  });
     res.writeHead(200, {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': 'http://127.0.0.1:5500',

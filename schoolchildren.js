@@ -1,7 +1,6 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 let dropDown = document.querySelector(".hidingButton");
-let form = document.querySelector(".info-form");
 let tickBoxes = document.getElementsByClassName("tickBox");
 let alertMessages = document.getElementsByClassName("alertMessage");
 const searchStudent = document.querySelector(".searchStudent")
@@ -30,8 +29,6 @@ Array.from(tickBoxes).forEach((tickBox, index) => {
   })
 
 })
-
-
 //sending a text message to the parent
 function textMessage() {
   const pickUpName = pickUpTheChild.value.trim()
@@ -46,7 +43,8 @@ function textMessage() {
     body: JSON.stringify({
       body:  messageBody,
       from: '+15075563406',
-      to: '+256775820129'
+      to: '+256775820129',
+      timestamp: new Date().toISOString() // Add timestamp
     })
   })
     .then(response => {
@@ -93,18 +91,27 @@ function teacherButton(query) {
   }
  })
 }
+popUp()
 })
 
 //Drop down for the form
-if (dropDown) {
-  dropDown.addEventListener('click', () => {
-    if (form.style.display === "none") {
-      form.style.display = "block";
+function popUp() {
+  let formpopUp = document.querySelector(".info-form");
+  let dropDown = document.querySelector(".hidingButton");
+   dropDown.addEventListener('click', () => {
+    if(formpopUp.style.display === "none" || formpopUp.style.display === "") {
+      formpopUp.style.display = "block";
     } else {
-      form.style.display = "none";
+      formpopUp.style.display = "none";
     }
-  });
+   })
 }
+
+
+
+
+
+
 /*function textMessage(){
 
   const client = twilio(accountSid, authTokenId)
