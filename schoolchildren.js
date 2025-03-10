@@ -12,7 +12,8 @@ dropDown.textContent = `Submit New Students details`
 
 //Pop up alert
 Array.from(tickBoxes).forEach((tickBox, index) => {
-  tickBox.addEventListener("click", () => {
+  tickBox.addEventListener("click", (event) => {
+    event.preventDefault() //Preven Default behaviour of a TickBox
     const alertMessage = alertMessages[index]
     if(alertMessage) {
       if(tickBox.checked) {
@@ -44,7 +45,7 @@ function textMessage() {
       body:  messageBody,
       from: '+15075563406',
       to: '+256775820129',
-      timestamp: new Date().toISOString() // Add timestamp
+      timestamp: new Date().toISOString() // Built in Date Objective
     })
   })
     .then(response => {
@@ -55,8 +56,12 @@ function textMessage() {
     })
     .then(data => console.log(data))
     .catch(error => console.error('Error:', error))
-
+      
 }
+
+
+
+
 
 //Search tabs
 searchStudent.addEventListener('click', () => {

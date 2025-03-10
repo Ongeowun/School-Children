@@ -4,7 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const http = require('http');
-const timestamp = require('timeStamp');
+
 
 const app = express();
 app.use(express.json());
@@ -31,7 +31,7 @@ app.post('/send-text', (req, res) => {
       body: body,
       from: from,
       to: to,
-      timestamp: timestamp
+      timestamp: new Date().toISOString() //Built in Date Objective.
     }
     fs.appendFileSync('messageDetails.json', JSON.stringify(messageDetails) + '\n', err => {
       if (err) {
