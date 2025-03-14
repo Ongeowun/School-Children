@@ -12,8 +12,7 @@ dropDown.textContent = `Submit New Students details`
 
 //Pop up alert
 Array.from(tickBoxes).forEach((tickBox, index) => {
-  tickBox.addEventListener("click", (event) => {
-    event.preventDefault() //Preven Default behaviour of a TickBox
+  tickBox.addEventListener("click", () => {
     const alertMessage = alertMessages[index]
     if(alertMessage) {
       if(tickBox.checked) {
