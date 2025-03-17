@@ -5,7 +5,6 @@ let tickBoxes = document.getElementsByClassName("tickBox");
 let alertMessages = document.getElementsByClassName("alertMessage");
 const searchStudent = document.querySelector(".searchStudent")
 const searchTeacher = document.querySelector(".searchTeacher")
-let displaySearchedName = document.querySelector(".displaySearchedName");
 let pickUpTheChild = document.querySelector(".pickUpTheChild")
  
 dropDown.textContent = `Submit New Students details`
@@ -59,11 +58,9 @@ function textMessage() {
 }
 
 
-
-
-
 //Search tabs
-searchStudent.addEventListener('click', () => {
+searchStudent.addEventListener('click', (event) => {
+  event.preventDefault()
   const studentInputButton = document.getElementById("studentInputButton").value.toLowerCase()
   studentButton(studentInputButton)
 })
@@ -73,17 +70,19 @@ searchTeacher.addEventListener('click', () => {
 })
 
 function studentButton(query){
+const displaySearchedName = document.querySelector(".displaySearchedName")
 const students = document.querySelectorAll('.nameDisplay .tickBox')
 let results = []
 students.forEach(student => {
-  if(student.textContent.toLowerCase().includes(query)) {
+  const studentName = displaySearchedName.nextSibling.textContent.trim().toLowerCase()
+  if(studentName.includes(query)) {
     student.parentElement.style.display = 'block'
     results.push(student.textContent)
   } else {
     student.parentElement.style.display = 'none'
   }
 })
-displaySearchedName.textContent = results.length ? `${results.join(' , ')}` : 'No student matched your search'
+displaySearchedName.nextSibling.textContent = results.length ? `${results.join(' , ')}` : 'No student matched your search'
 }
 function teacherButton(query) {
  const teachers = document.querySelectorAll('.nameDisplay .tickBox')
