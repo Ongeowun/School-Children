@@ -110,8 +110,59 @@ function popUp() {
    })
 }
 
+//saving the clicked buttton to the local storage
+document.addEventListener('DOMContentLoaded', () => {
+  const checkboxes = document.querySelectorAll('.tickBox')
 
+  checkboxes.forEach((checkbox, index) => {
+    checkbox.addEventListener('click', () => {
+      const pupilName = checkbox.parentElement.textContent.trim()
+      const isChecked = checkbox.checked
 
+      //The data to be stored in the local storage
+      const data = {
+        name: pupilName,
+        checked: isChecked,
+        timestamp: new Date().toISOString()
+      }
+      //sending the stored data to the local storage/ backend 
+      fetch('http://localhost:5500/save-data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+       .then(response => response.json())
+       .then(result => {
+          console.log('Saved succesfully', result)
+       })
+       .catch(error => {
+        console.error('Error saving data:', error)
+       })
+    })
+  })
+})
+
+//download the data in a CSV file
+document.addEventListener('DOMContentLoaded', () => {
+  const downloadButton = document.querySelector('.downloadButton')
+  downloadButton.addEventListener('click', () => {
+    fetch('http://localhost:5500/download')
+      .then(response => response.blob())
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = 'data.csv'
+        a.click()
+        a.remove()
+      })
+      .catch(error => {
+        console.error('Error downloading data:', error)
+      })
+  })
+})
 
 
 

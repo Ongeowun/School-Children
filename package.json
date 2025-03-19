@@ -2,6 +2,7 @@
     "dependencies": {
         "cors": "^2.8.5",
         "express": "^4.21.2",
+        "json2csv": "^6.0.0-alpha.2",
         "npm": "^11.0.0",
         "twilio": "^5.4.5"
     },
