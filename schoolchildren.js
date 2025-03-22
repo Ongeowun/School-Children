@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = {
         name: pupilName,
         checked: isChecked,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toLocaleString()
       }
       //sending the stored data to the local storage/ backend 
       fetch('http://localhost:5500/save-data', {

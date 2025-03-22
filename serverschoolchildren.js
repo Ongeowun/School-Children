@@ -32,7 +32,7 @@ app.post('/send-text', (req, res) => {
       body: body,
       from: from,
       to: to,
-      timestamp: new Date().toISOString() //Built in Date Objective.
+      timestamp: new Date().toLocaleString() //Built in Date Objective.
     }
     fs.appendFileSync('messageDetails.json', JSON.stringify(messageDetails) + '\n', err => {
       if (err) {
@@ -71,7 +71,21 @@ app.post('/save-data', (req, res) => {
 
 //save the data
 const data = { name, checked, timestamp };
+try {
+ const filePath = 'data.csv'
+ //checking if the file exist.
+ if (!fs.existsSync(filePath) || fs.statSync(filePath).size === 0) {
+  const header = 'Student Name, Message, Checked, Time\n';
+  fs.writeFileSync(filePath, header, {flag: 'a'});
+ }
 
+//Append the data to the file
+fs.appendFileSync(filePath, data)
+//res status(200).json({ message: 'Data saved successfully' });
+} catch (error) {
+  console.error('Error saving data:', error);
+  res.status(500).json({ error: 'Error saving data' });
+}
 //append the data to the file
 const cvsfile = `${data.name}, ${data.checked}, ${data.timestamp}\n`;
 try {
