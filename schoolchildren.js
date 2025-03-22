@@ -114,7 +114,7 @@ function popUp() {
 document.addEventListener('DOMContentLoaded', () => {
   const checkboxes = document.querySelectorAll('.tickBox')
 
-  checkboxes.forEach((checkbox, index) => {
+  checkboxes.forEach((checkbox) => {
     checkbox.addEventListener('click', () => {
       const pupilName = checkbox.parentElement.textContent.trim()
       const isChecked = checkbox.checked
@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
   const downloadButton = document.querySelector('.downloadButton')
   downloadButton.addEventListener('click', () => {
-    fetch('http://localhost:5500/download')
+    fetch('http://localhost:5500/download-csv')
       .then(response => response.blob())
       .then(blob => {
         const url = window.URL.createObjectURL(blob)

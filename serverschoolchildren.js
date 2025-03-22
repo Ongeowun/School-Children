@@ -4,7 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const http = require('http');
-const {parse} = require('json2csv'); //Converts JSON to CSV
+//const {parse} = require('json2csv'); //Converts JSON to CSV
 
 
 const app = express();
@@ -59,15 +59,14 @@ app.listen(5500, () => {
 }) 
 
 
-// Backend code to saved the click buttons
+// Backend code to save the click buttons
 //Route to save clicked buttons
 app.post('/save-data', (req, res) => {
   const { name, checked, timestamp } = req.body;
 
 //validate the data and request
   if (!name || typeof checked === 'undefined' || !timestamp) {
-    res.status(400).json({ error: 'Invalid data' });
-    return;
+    return res.status(400).json({ error: 'Invalid data' });
   }
 
 //save the data
@@ -75,12 +74,14 @@ const data = { name, checked, timestamp };
 
 //append the data to the file
 const cvsfile = `${data.name}, ${data.checked}, ${data.timestamp}\n`;
-fs.appendFileSync('data.csv', cvsfile, err => {
-  if (err) {
-    console.log( `Error writing to file: ${err}`);
-    return res.status(500).json({ error: 'Error saving data' });
-  }
-  res.status(200).json({ message: 'Data saved successfully', data: data });
+try {
+ fs.appendFileSync('data.csv', cvsfile);
+  res.status(200).json({ message: 'Data saved successfully' });
+} catch (err) {
+  console.error('Error saving data:', err);
+  res.status(500).json({ error: 'Error saving data' });
+}
+
 })
 
 //Download the data as a CSV file
@@ -96,28 +97,19 @@ app.get('/download-csv', (req, res) => {
   }else {
     res.status(404).json({ error: 'File not found' });
   }
-   try {
-    const csv = parse(data);
-    res.header('Content-Type', 'text/csv');
-    res.attachment('data.csv');
-    return res.send(csv);
-   } catch (err) {
-    console.error('Error downloading data:', err);
-    return res.status(500).json({ error: 'Error downloading data' });
-   }
 });
 
-fs.appendFileSync('data.json', JSON.stringify(data) + '\n', err => {
+/*fs.appendFileSync('data.json', JSON.stringify(data) + '\n', err => {
   if (err) {
     console.log( `Error writing to file: ${err}`);
     return res.status(500).json({ error: 'Error saving data' });
   }
   res.status(200).json({ message: 'Data saved successfully' });
 })
-})
+
 app.listen(5500, () => {
   console.log('Listening on port 5500');
-})
+})*/
 
 /*const server = http.createServer((req, res) => {
   if(req.method === 'POST') {
