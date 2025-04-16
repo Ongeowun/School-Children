@@ -136,4 +136,17 @@ height: 2em;
   cursor: pointer;
   color: #ffffff;
 }
+.makePayments, .dashboard {
+  position: absolute;
+  top: 0.5em;
+  right: 10em;
+  cursor: pointer;
+  font-weight: bold;
+}
+.makePayments {
+  right: 18em;
+}
+.mainPage{
+  cursor: pointer;
+}
   

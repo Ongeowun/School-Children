@@ -87,9 +87,9 @@ fs.appendFileSync(filePath, data)
   res.status(500).json({ error: 'Error saving data' });
 }
 //append the data to the file
-const cvsfile = `${data.name}, ${data.checked}, ${data.timestamp}\n`;
+const csvfile = `${data.name}, ${data.checked}, ${data.timestamp}\n`;
 try {
- fs.appendFileSync('data.csv', cvsfile);
+ fs.appendFileSync('data.csv', csvfile);
   res.status(200).json({ message: 'Data saved successfully' });
 } catch (err) {
   console.error('Error saving data:', err);
@@ -112,6 +112,38 @@ app.get('/download-csv', (req, res) => {
     res.status(404).json({ error: 'File not found' });
   }
 });
+
+app.get('/get-data', (req, res) => {
+  const filePath = 'data.csv';
+
+  if(!fs.existsSync(filePath)) {
+    return res.status(404).json({ error: 'File not found' });
+  }
+
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if(err) {
+      console.error(`Error reading file: ${err}`);
+      return res.status(500).json({ error: 'Error reading file' });
+    }
+
+    const rows = data.trim().split('\n').slice(1); // Skip the header row
+    const jsonData = rows.map((row) => {
+      const [name, message, checked, timestamp] = row.split(',');
+      return {
+        name: name.trim(),
+        message: message.trim(),
+        checked: checked.trim() === 'true',
+        timestamp: timestamp.trim()
+      };
+    })
+    res.status(200).json(jsonData);
+  })
+})
+ app.listen(5500, () => {
+  console.log('Listening on port 5500');
+ })
+
+
 
 /*fs.appendFileSync('data.json', JSON.stringify(data) + '\n', err => {
   if (err) {
