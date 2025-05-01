@@ -6,22 +6,23 @@ document.addEventListener('DOMContentLoaded', () => {
   } else if(currentPage.includes('dashboard.html')){
     initiliazedashBoardPage()
   }
+  
 
   function initializeschoolChildrenPage() {
     let dropDown = document.querySelector(".hidingButton");
     let tickBoxes = document.getElementsByClassName("tickBox");
     let alertMessages = document.getElementsByClassName("alertMessage");
-    const searchStudent = document.querySelector(".searchStudent")
     const searchTeacher = document.querySelector(".searchTeacher")
     let pickUpTheChild = document.querySelector(".pickUpTheChild")
     let dashboard = document.querySelector(".dashboard")
     let makePayments = document.querySelector(".makePayments")
     let mainPage = document.querySelector(".mainPage")
-
+   
 
     dropDown.textContent = `Submit New Students details`
     dashboard.textContent = `DASHBOARD`
     makePayments.textContent = `MAKE PAYMENTS`
+
 
    dashboard.addEventListener('click', () => {
     window.location.href = 'dashboard.html'
@@ -78,16 +79,27 @@ document.addEventListener('DOMContentLoaded', () => {
     
     
     //Search tabs
-      searchStudent.addEventListener('click', (event) => {
-        event.preventDefault();
-        const studentInputButton = document.getElementById("studentInputButton").value.toLowerCase();
-        studentButton(studentInputButton);
-      });
-
-    searchTeacher.addEventListener('click', () => {
-      const teacherInputButton = document.getElementById("teacherInputButton").value.toLowerCase()
-      teacherButton(teacherInputButton)
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchStudent = document.querySelector(".searchStudent")
+      const searchTeacher = document.querySelector(".searchTeacher")
+      const teacherName = document.getElementById("teacherInputButton")
+      const studentName =  document.getElementById("studentInputButton")
+      if(searchStudent && studentName) {
+        searchStudent.addEventListener('click', (event) => {
+          event.preventDefault();
+          const query = studentName.value.toLowerCase();
+          studentButton(query);
+        });
+      }
+      if(searchTeacher && teacherName) {
+        searchTeacher.addEventListener('click', (event) => {
+          event.preventDefault();
+          const query = teacherName.value.toLowerCase();
+          teacherButton(query);
+        });
+      }
     })
+
     
     function studentButton(query){
     const displaySearchedName = document.querySelector(".displaySearchedName")
@@ -96,16 +108,17 @@ document.addEventListener('DOMContentLoaded', () => {
     students.forEach(student => {
       const studentName = displaySearchedName.nextSibling.textContent.trim().toLowerCase()
       if(studentName.includes(query)) {
-        student.parentElement.style.display = 'block'
+        student.parentElement.style.display = 'block' //show matching students
         results.push(student.textContent)
       } else {
-        student.parentElement.style.display = 'none'
+        student.parentElement.style.display = 'none' 
       }
     })
     displaySearchedName.nextSibling.textContent = results.length ? `${results.join(' , ')}` : 'No student matched your search'
     }
     function teacherButton(query) {
      const teachers = document.querySelectorAll('.nameDisplay .tickBox')
+     
      teachers.forEach(teacher => {
       if(teacher.textContent.toLocaleLowerCase().includes(query)) {
         teacher.parentElement.style.display = 'block'
@@ -151,18 +164,23 @@ document.addEventListener('DOMContentLoaded', () => {
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
-          })
-           .then(response => response.json())
-           .then(result => {
-              console.log('Saved succesfully', result)
+            body: JSON.stringify(data),
+            })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok')
+              }
+              return response.text().then((text) =>(text ? JSON.parse(text) : {}))
+            })
+           .then((data) => {
+            console.log('Data saved succesfully:', data)
            })
-           .catch(error => {
+           .catch((error) => {
             console.error('Error saving data:', error)
            })
         })
       })
-    })
+    
     
     //download the data in a CSV file
     document.addEventListener('DOMContentLoaded', () => {
@@ -186,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
   
 
-function initiliazedashBoardPage() {
+ function initiliazedashBoardPage() {
 
   let dashboard = document.querySelector(".dashboard")
   let makePayments = document.querySelector(".makePayments")
@@ -199,15 +217,15 @@ function initiliazedashBoardPage() {
       window.location.href = 'schoolchildren.html'
     })
 
-// Fetching the day's data from the backend
-fetch('http://localhost:5500/get-data')
-.then((response) => {
+ // Fetching the day's data from the backend
+ fetch('http://localhost:5500/get-data')
+ .then((response) => {
    if (!response.ok) {
      throw new Error('Network response was not ok, Failed to fetch data')
    }
    return response.json()
-})
-.then((data) => {
+ })
+ .then((data) => {
  //Counting dropped children and children not yet dropped
  const droppedChildren = data.filter(child => child.checked).length
  const notDroppedChildren = data.filter(child => !child.checked).length
@@ -257,14 +275,14 @@ fetch('http://localhost:5500/get-data')
      }
    }
  })
-})
-.catch((error) => {
+ })
+ .catch((error) => {
    console.error('Error fetching data:', error)
+ })
+ console.log('Dropped Children:', droppedChildren);
+ console.log('Not Dropped Children:', notDroppedChildren);
+
+ console.log(document.querySelector('.barChart'));
+ console.log(document.querySelector('.pieChart'));
+  }
 })
-console.log('Dropped Children:', droppedChildren);
-console.log('Not Dropped Children:', notDroppedChildren);
-
-console.log(document.querySelector('.barChart'));
-console.log(document.querySelector('.pieChart'));
-}
-
