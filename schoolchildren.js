@@ -200,6 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error downloading data:', error)
           })
       })
+    console.log(downloadButton)
     })
     
   
