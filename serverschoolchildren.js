@@ -54,9 +54,6 @@ app.post('/send-text', (req, res) => {
   });
 });
 
-app.listen(5500, () => {
-  console.log('Listening on port 5500');
-}) 
 
 
 // Backend code to save the click buttons
@@ -98,6 +95,23 @@ try {
 
 })
 
+app.get('/get-data', (req, res) => {
+  const filePath = 'data.csv';
+  if (!fs.existsSync(filePath)) {
+    return res.status(404).json({ error: 'Data file not found' });
+  }
+  fs.readFile(filePath, 'utf8', (err, fileData) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error reading data file' });
+    }
+    const lines = fileData.trim().split('\n').slice(1); // Skip the header line
+    const data = lines.map(line => {
+      const [name, checked, timestamp] = line.split(',').map(item => item.trim());
+      return { name, checked: checked === 'true', timestamp };
+    });
+    res.status(200).json({ data: data });
+  });
+});
 //Download the data as a CSV file
 app.get('/download-csv', (req, res) => {
   const filePath = 'data.csv';
@@ -112,7 +126,9 @@ app.get('/download-csv', (req, res) => {
     res.status(404).json({ error: 'File not found' });
   }
 });
-
+app.listen(5500, () => {
+  console.log('Listening on port 5500');
+});
 
 /*fs.appendFileSync('data.json', JSON.stringify(data) + '\n', err => {
   if (err) {

@@ -73,10 +73,10 @@
    .catch((error) => {
      console.error('Error fetching data:', error)
    })
-   console.log('Dropped Children:', droppedChildren);
-   console.log('Not Dropped Children:', notDroppedChildren);
+   //console.log('Dropped Children:', droppedChildren);
+   //console.log('Not Dropped Children:', notDroppedChildren);
   
-   console.log(document.querySelector('.barChart'));
-   console.log(document.querySelector('.pieChart'));
+   console.log(document.querySelector('#barChart'));
+   console.log(document.querySelector('#pieChart'));
     
   

@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
             alertMessage.textContent =    `You have sent a message to the Parent`
             setTimeout(() => {
               alertMessage.style.display = "none"
-            }, 3000)// clear the message after 3 seconds
+            }, 3000)// clear the popup after 3 seconds
             textMessage()//send a text message to the parent
           } else {
                   alertMessage.style.display = "none"
@@ -193,6 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const a = document.createElement('a')
             a.href = url
             a.download = 'data.csv'
+            document.body.appendChild(a)
             a.click()
             a.remove()
           })
