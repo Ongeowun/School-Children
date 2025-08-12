@@ -76,7 +76,7 @@
    //console.log('Dropped Children:', droppedChildren);
    //console.log('Not Dropped Children:', notDroppedChildren);
   
-   console.log(document.querySelector('#barChart'));
-   console.log(document.querySelector('#pieChart'));
+   console.log(document.getElementById('barChart'));
+   console.log(document.getElementById('pieChart'));
     
   

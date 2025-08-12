@@ -4,6 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const http = require('http');
+const path = require('path');
 //const {parse} = require('json2csv'); //Converts JSON to CSV
 
 
@@ -59,32 +60,29 @@ app.post('/send-text', (req, res) => {
 // Backend code to save the click buttons
 //Route to save clicked buttons
 app.post('/save-data', (req, res) => {
-  const { name, checked, timestamp } = req.body;
+  const { name, message, checked, timestamp } = req.body;
 
 //validate the data and request
-  if (!name || typeof checked === 'undefined' || !timestamp) {
+  if (!name || !message || typeof checked === 'undefined' || !timestamp) {
     return res.status(400).json({ error: 'Invalid data' });
   }
 
 //save the data
-const data = { name, checked, timestamp };
+const data = {name,message,checked,timestamp};
 try {
  const filePath = 'data.csv'
  //checking if the file exist.
  if (!fs.existsSync(filePath) || fs.statSync(filePath).size === 0) {
-  const header = 'Student Name, Message, Checked, Time\n';
+  const header = 'Student Name,MessageChecked, Time\n';
   fs.writeFileSync(filePath, header, {flag: 'a'});
  }
 
-//Append the data to the file
-fs.appendFileSync(filePath, data)
-//res status(200).json({ message: 'Data saved successfully' });
-} catch (error) {
+  } catch (error) {
   console.error('Error saving data:', error);
   res.status(500).json({ error: 'Error saving data' });
-}
+ }
 //append the data to the file
-const csvfile = `${data.name}, ${data.checked}, ${data.timestamp}\n`;
+const csvfile = `${data.name},${data.message},${data.checked},${data.timestamp}\n`;
 try {
  fs.appendFileSync('data.csv', csvfile);
   res.status(200).json({ message: 'Data saved successfully' });
@@ -94,7 +92,6 @@ try {
 }
 
 })
-
 app.get('/get-data', (req, res) => {
   const filePath = 'data.csv';
   if (!fs.existsSync(filePath)) {
@@ -106,10 +103,10 @@ app.get('/get-data', (req, res) => {
     }
     const lines = fileData.trim().split('\n').slice(1); // Skip the header line
     const data = lines.map(line => {
-      const [name, checked, timestamp] = line.split(',').map(item => item.trim());
-      return { name, checked: checked === 'true', timestamp };
+      const [name,  message, checked, timestamp] = line.split(',').map(item => item.trim());
+      return { name, message, checked: checked === 'true', timestamp };
     });
-    res.status(200).json({ data: data });
+    res.status(200).json(data);
   });
 });
 //Download the data as a CSV file

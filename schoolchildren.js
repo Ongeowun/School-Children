@@ -1,3 +1,4 @@
+//const { Message } = require("twilio/lib/twiml/MessagingResponse");
 
 document.addEventListener('DOMContentLoaded', () => {
   const currentPage = window.location.pathname
@@ -155,6 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
           //The data to be stored in the local storage
           const data = {
             name: pupilName,
+            message: isChecked ? 'Your child has been dropped at home' : 'Your child has not been dropped at home',
             checked: isChecked,
             timestamp: new Date().toLocaleString()
           }
