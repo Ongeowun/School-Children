@@ -73,7 +73,7 @@ try {
  const filePath = 'data.csv'
  //checking if the file exist.
  if (!fs.existsSync(filePath) || fs.statSync(filePath).size === 0) {
-  const header = 'Student Name,MessageChecked, Time\n';
+  const header = 'Student Name, Message, Time\n';
   fs.writeFileSync(filePath, header, {flag: 'a'});
  }
 

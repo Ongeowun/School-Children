@@ -1,3 +1,5 @@
+document.addEventListener('DOMContentLoaded', () => {
+
 
 
     let dashboard = document.querySelector(".dashboard")
@@ -26,7 +28,7 @@
   
    //Displaying the data on the dashboard
    //Bar chart
-   const barChart = document.querySelector('.barChart').getContext('2d')
+   const barChart = document.getElementById('barChart').getContext('2d')
    new Chart(barChart, {
      type: 'bar',
      data: {
@@ -41,14 +43,14 @@
      options: {
        responsive: true,
        scales: {
-         Y: {
+         y: {
            beginAtZero: true,
          }
       }
      }
    })
    //Pie chart
-   const pieChart = document.querySelector('.pieChart').getContext('2d')
+   const pieChart = document.getElementById('pieChart').getContext('2d')
    new Chart(pieChart, {
      type: 'pie',
      data: {
@@ -56,7 +58,7 @@
        datasets: [{
          label: 'Delivery Status',
          data: [droppedChildren, notDroppedChildren],
-         backgroundColor: ['#4CAF50', '#FF5733'],
+         backgroundColor: ['#4CAF50', '#f77d61ff'],
          borderWidth: 1
        }]
      },
@@ -78,5 +80,7 @@
   
    console.log(document.getElementById('barChart'));
    console.log(document.getElementById('pieChart'));
+
+})
     
   

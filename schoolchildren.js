@@ -29,8 +29,16 @@ document.addEventListener('DOMContentLoaded', () => {
     window.location.href = 'dashboard.html'
    })
 
+  // const today = new Date().toISOString().split('0, 10')
+
     //Pop up alert
     Array.from(tickBoxes).forEach((tickBox, index) => {
+   // const studentName = tickBox.parentElement.textContent.trim()
+    // const storageKey = `dropped_${studentName}_${today}`;
+   // if( localStorage.getItem(storageKey) === 'true') {
+    //tickBox.checked = true
+    //tickBox.disabled = true
+   // }
       tickBox.addEventListener("click", () => {
         const alertMessage = alertMessages[index]
         if(alertMessage) {
@@ -41,9 +49,11 @@ document.addEventListener('DOMContentLoaded', () => {
               alertMessage.style.display = "none"
             }, 3000)// clear the popup after 3 seconds
             textMessage()//send a text message to the parent
+              tickBox.disabled = true 
           } else {
                   alertMessage.style.display = "none"
                 } 
+
         }
       });
       });
@@ -147,9 +157,21 @@ document.addEventListener('DOMContentLoaded', () => {
     //saving the clicked buttton to the local storage
     document.addEventListener('DOMContentLoaded', () => {
       const checkboxes = document.querySelectorAll('.tickBox')
-    
-      checkboxes.forEach((checkbox) => {
-        checkbox.addEventListener('click', () => {
+         
+       const today = new Date().toISOString().split('0, 10')
+
+      checkboxes.forEach((checkbox, idx) => {
+         
+        const studentKey =  `dropped_${idx}_${today}`;
+        if (localStorage.getItem(studentKey) === 'true') {
+          checkbox.checked = true
+          checkbox.disabled = true; // Disable the checkbox if already checked
+        }
+
+        checkbox.addEventListener('change', () => {
+          if (checkbox.checked) {
+            localStorage.setItem(studentKey, 'true');
+           }
           const pupilName = checkbox.parentElement.textContent.trim()
           const isChecked = checkbox.checked
     
@@ -185,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     
     //download the data in a CSV file
-    document.addEventListener('DOMContentLoaded', () => {
+   
       const downloadButton = document.querySelector('.downloadButton')
       downloadButton.addEventListener('click', () => {
         fetch('http://localhost:5500/download-csv')
@@ -204,9 +226,8 @@ document.addEventListener('DOMContentLoaded', () => {
           })
       })
     console.log(downloadButton)
-    })
     
-  
+    
 
  function initiliazedashBoardPage() {
 
@@ -236,7 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
  //Displaying the data on the dashboard
  //Bar chart
- const barChart = document.querySelector('.barChart').getContext('2d')
+ const barChart = document.getElementById('barChart').getContext('2d')
  new Chart(barChart, {
    type: 'bar',
    data: {
@@ -251,14 +272,14 @@ document.addEventListener('DOMContentLoaded', () => {
    options: {
      responsive: true,
      scales: {
-       Y: {
+       y: {
          beginAtZero: true,
        }
     }
    }
  })
  //Pie chart
- const pieChart = document.querySelector('.pieChart').getContext('2d')
+ const pieChart = document.getElementById('pieChart').getContext('2d')
  new Chart(pieChart, {
    type: 'pie',
    data: {
