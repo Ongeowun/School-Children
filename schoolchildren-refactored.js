@@ -9,7 +9,8 @@ const CONFIG = {
     SEND_TEXT: 'http://localhost:5500/send-text',
     SAVE_DATA: 'http://localhost:5500/save-data',
     GET_DATA: 'http://localhost:5500/get-data',
-    DOWNLOAD_CSV: 'http://localhost:5500/download-csv'
+    DOWNLOAD_CSV: 'http://localhost:5500/download-csv',
+    GET_STUDENTS: 'http://localhost:5500/get-students'
   },
   PHONE_NUMBERS: {
     FROM: '+15075563406',
@@ -109,6 +110,17 @@ const APIService = {
     } catch (error) {
       Utils.logError(error, 'downloadCSV');
     }
+  },
+
+  async fetchStudents() {
+    try {
+      const response = await fetch(CONFIG.API_ENDPOINTS.GET_STUDENTS);
+      if (!response.ok) throw new Error('Failed to fetch students');
+      return await response.json();
+    } catch (error) {
+      Utils.logError(error, 'fetchStudents');
+      throw error;
+    }
   }
 };
 
@@ -203,77 +215,6 @@ const SMSService = {
       : 'Your child has been dropped at home';
     
     return APIService.sendSMS(messageBody);
-  }
-};
-
-// Dashboard Module
-const DashboardManager = {
-  async init() {
-    await this.loadDashboardData();
-    this.bindEvents();
-  },
-  
-  async loadDashboardData() {
-    try {
-      const data = await APIService.fetchDashboardData();
-      const droppedChildren = data.filter(child => child.checked).length;
-      const notDroppedChildren = data.filter(child => !child.checked).length;
-      
-      this.renderCharts(droppedChildren, notDroppedChildren);
-    } catch (error) {
-      Utils.showAlert('Failed to load dashboard data');
-    }
-  },
-  
-  renderCharts(dropped, notDropped) {
-    // Bar Chart
-    const barCtx = document.getElementById('barChart')?.getContext('2d');
-    if (barCtx) {
-      new Chart(barCtx, {
-        type: 'bar',
-        data: {
-          labels: ['Dropped at Home', 'Not Dropped at Home'],
-          datasets: [{
-            label: 'Number of Children',
-            data: [dropped, notDropped],
-            backgroundColor: ['#4CAF50', '#FF5733'],
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: { y: { beginAtZero: true } }
-        }
-      });
-    }
-    
-    // Pie Chart
-    const pieCtx = document.getElementById('pieChart')?.getContext('2d');
-    if (pieCtx) {
-      new Chart(pieCtx, {
-        type: 'pie',
-        data: {
-          labels: ['Dropped at Home', 'Not Dropped at Home'],
-          datasets: [{
-            label: 'Delivery Status',
-            data: [dropped, notDropped],
-            backgroundColor: ['#4CAF50', '#FF5733'],
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: { legend: { position: 'top' } }
-        }
-      });
-    }
-  },
-  
-  bindEvents() {
-    const mainPageBtn = document.querySelector('.mainPage');
-    mainPageBtn?.addEventListener('click', () => {
-      window.location.href = 'schoolchildren.html';
-    });
   }
 };
 

@@ -1,0 +1,10 @@
+- [ ] Update header styles in schoolchildren.css to use flexbox for responsiveness
+- [ ] Change .info-form from absolute positioning to centered, responsive layout
+- [ ] Convert fixed widths (em) to relative units (%) or max-width for inputs and forms
+- [ ] Update .nameDisplay to use flex with wrap for multiple columns on larger screens
+- [ ] Remove absolute positioning from buttons and alerts, use flex in header
+- [ ] Add media queries for tablet (768px) and mobile (480px) breakpoints
+- [ ] Update canvas styles to width: 100%; height: auto; for responsiveness
+- [ ] Edit dashboard.html to remove fixed width/height from canvas elements
+- [ ] Test dashboard.html responsiveness with browser_action
+- [ ] Test schoolchildren.html responsiveness with browser_action

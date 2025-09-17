@@ -3,28 +3,45 @@
 body {
   background-color: aliceblue;
 }
+header {
+  display: flex;
+  justify-content: flex-start;
+  padding: 1em;
+  flex-wrap: wrap;
+}
 .info-form {
-  background-color: fdfff5;
+  background-color: #ffffff;
   border-radius: 10px;
+  -webkit-box-shadow: 3px 3px 8px rgb(114, 113, 111), -3px -3px 8px #ffffff;
   box-shadow:  3px 3px  8px rgb(114, 113, 111),
               -3px -3px  8px #ffffff;
-   -webkit-box-shadow: 3px 3px 8px rgb(114, 113, 111), -3px -3px 8px #ffffff;
-  height: 80em;
-  width: 60em;
-  position: absolute;
-  margin: 5em;
-  margin-left: 3em;
+  max-width: 90%;
+  width: 40em;
+  height: auto;
+  padding: 1em;
+  margin: 1em auto;
   display: none;
+}
+
+  .submit-form-btn {
+    margin: 2em;
+    margin-left: 2.5em;
+    height: 2.5em;
+    border-radius: 1em;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    background-color: #FBCEB1;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 
   h3, h4, h2, p {
     font-size: 1em;
-    margin: 1em;
-    display: flex;
-    justify-content: space-between;
+    margin: 0 0.5em;
+    display: relative;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Oxygen', Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-
   }
-  nav {
+  .schoolDetails {
     background-color: rgb(100, 227, 227);
     border-radius: 12px;
     margin: 2em;
@@ -53,33 +70,31 @@ p {
     font-weight: bold;
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, 'Oxygen', Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-
 }
+#lastNameParents, #parClass {
+  margin-top: 2em;
+}
+#parentsDetails, #secondParentsDetails, #studentDetails {
+  margin-top: 2em;
+}
+
 #firstName, #lastName, #studentsClass {
-    position: absolute;
-    border-radius: .45em;
-    width: 20em;
-    height: 2em;
-    margin-left: 2em;
-}
-#parLastName, #parClass {
-  margin-top: 2em;
-}
-#parentsDetails, #secondParentsDetails {
-  margin-top: 2em;
-}
-#parentsSecondName, #parentsFirstName, #parentsContacts, #parentsemails, #parentsLocations{
-  position: absolute;
   border-radius: .45em;
-  margin-left: 2em;
-  margin-top: -2em;
-  width: 20em;
+  width: 100%;
+  max-width: 20em;
   height: 2em;
 }
+
+#parentsSecondName, #parentsFirstName, #parentsContacts, #parentsemails, #parentsLocations {
+  border-radius: .45em;
+  width: 100%;
+  max-width: 20em;
+  height: 2em;
+}
+
 #SecondParentFirstName, #SecondParentSecondName, #SecondparentContacts, #SecondParentEmail, #SecondParentLocation{
-position: absolute;
 border-radius: .45em;
-margin-left: 2em;
-margin-top: -2em;
-width: 20em;
+width: 100%;
+max-width: 20em;
 height: 2em;
 }
 #lastNameParents, #contactFirstParent, #emailFirstParent, #ParentsLocation {
@@ -93,63 +108,116 @@ height: 2em;
     margin-bottom: 20em;
 }
 .nameDisplay {
-  display: flexbox;
+  display: relative;
+  justify-content: space-between;
   margin: 2.5em;
   font-size: 2em;
-  justify-content: flex;
+  background: aliceblue;
+  border-radius: 10px;
+  -webkit-box-shadow: 3px 3px 8px rgb(114, 113, 111), -3px -3px 8px #ffffff;
+  box-shadow:  3px 3px  8px rgb(114, 113, 111),
+              -3px -3px  8px #ffffff;
 }
 .alertMessage, .alert-message {
   background: aliceblue;
   border-radius: 10px;
+  -webkit-box-shadow: 3px 3px 8px rgb(114, 113, 111), -3px -3px 8px #ffffff;
   box-shadow:  3px 3px  8px rgb(114, 113, 111),
               -3px -3px  8px #ffffff;
-   -webkit-box-shadow: 3px 3px 8px rgb(114, 113, 111), -3px -3px 8px #ffffff;
   height: 4em;
-  width: 19em;
-  position: absolute;
-  margin-left: 25em;
+  max-width: 19em;
   font-size: 0.5em;
   display: none;
   padding-left: 0.2em;
-}
-.nameDisplay {
-  background: aliceblue;
-  border-radius: 10px;
-  box-shadow:  3px 3px  8px rgb(114, 113, 111),
-              -3px -3px  8px #ffffff;
-   -webkit-box-shadow: 3px 3px 8px rgb(114, 113, 111), -3px -3px 8px #ffffff;
-   width: 8em;
 }
 .PickUpfromSchool {
   margin: 1.5em;
 }
 .downloadButton {
-  background-color: #E9965F;
-  position: absolute;
-  right: 2.5em;
-  top: 1em;
-  border-radius: 1em;
+  background-color: rgb(100, 227, 227);
+  border-radius: 0.4em;
   border: #ffffff;
-  height: 2.5em;
   font-size: 1em;
   font-weight: bold;
   cursor: pointer;
   color: #ffffff;
 }
 .makePayments, .dashboard {
-  position: absolute;
-  top: 0.5em;
-  right: 10em;
   cursor: pointer;
   font-weight: bold;
-}
-.makePayments {
-  right: 18em;
 }
 .mainPage{
   cursor: pointer;
 }
   canvas {
+    width: 100%;
+    height: auto;
     max-width: 400px;
     max-height: 200px;
   }
+
+  .dashboard-charts {
+  display: flex;
+  justify-content: space-between;
+  gap: 1em;
+  padding: 0.5em;
+  flex-wrap: wrap;
+}
+
+.dashboard-charts section {
+  flex: 1;
+  min-width: 300px;
+  background: white;
+  border-radius: 10px;
+  padding: 1em;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  margin: 0.5em;
+}
+
+.datedropdown {
+  margin: 1em;
+  border-radius: 0.5em;
+  height: 1em;
+  background-color: rgb(100, 227, 227);
+  padding: 1em;
+  font-weight: 600;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;;
+}
+#status, #date, #dateSelect {
+  border-radius: 0.5em;
+  height: 2em;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .info-form {
+    width: 95%;
+    margin: 1em;
+  }
+  .nameDisplay {
+    font-size: 1.5em;
+  }
+  .dashboard-charts {
+    flex-direction: column;
+  }
+  .dashboard-charts section {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .info-form {
+    padding: 1em;
+  }
+  .nameDisplay {
+    font-size: 1em;
+    margin: 1em;
+  }
+  .alertMessage {
+    width: 100%;
+  }
+}

@@ -243,14 +243,10 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
  // Fetching the day's data from the backend
- fetch('http://localhost:5500/get-data')
- .then((response) => {
-   if (!response.ok) {
-     throw new Error('Network response was not ok, Failed to fetch data')
-   }
-   return response.json()
- })
- .then((data) => {
+ Promise.all([
+   fetch('http://localhost:5500/get-data').then(r => r.json()),
+   fetch('http://localhost:5500/get-students').then(r => r.json())
+ ]).then(([data, students]) => {
  //Counting dropped children and children not yet dropped
  const droppedChildren = data.filter(child => child.checked).length
  const notDroppedChildren = data.filter(child => !child.checked).length
@@ -304,10 +300,5 @@ document.addEventListener('DOMContentLoaded', () => {
  .catch((error) => {
    console.error('Error fetching data:', error)
  })
- console.log('Dropped Children:', droppedChildren);
- console.log('Not Dropped Children:', notDroppedChildren);
-
- console.log(document.querySelector('.barChart'));
- console.log(document.querySelector('.pieChart'));
   }
 })

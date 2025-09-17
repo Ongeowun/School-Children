@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <title>School Children Delivery</title>
         <link rel="stylesheet" type="text/css" href="schoolchildren.css">
@@ -11,12 +11,24 @@
     </head>
     <body>
          <header>
-            <h2 class="mainPage">SCHOOL DELIVERY</h2>
-            <button class="downloadButton">DOWNLOAD</button>
+            <h2 class="mainPage">ORCA</h2>
             <h2 class="makePayments"></h2>
             <h2 class="dashboard"></h2>
+               <button class="downloadButton">DOWNLOAD</button>
         </header>
-      <section>
+        <div class="datedropdown">
+            <label for="date">SELECT DATE:</label>
+            <input type="date" id="date" name="date">
+            <label for="status">SELECT STATUS:</label>
+            <select id="status" name="status">
+                <option value="all">All</option>
+                <option value="delivered">Delivered</option>
+                <option value="pending">Pending</option>
+                <option value="failed">Failed</option>
+            </select>
+        </div>
+        <div class="dashboard-charts">
+             <section>
         <h2>Bar Chart: Children Delivery status</h2>
         <canvas id="barChart" width="50px" height="25px"></canvas>
       </section>
@@ -24,9 +36,8 @@
         <h2>Pie chart: Children Delivery status</h2>
         <canvas id="pieChart" width="50px" height="25px"></canvas>
       </section>
-  
-
-
+        </div>
+   
 
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
       <script src="dashboard.js"></script>
