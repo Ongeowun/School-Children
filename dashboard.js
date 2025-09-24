@@ -123,6 +123,20 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Dropped children:', droppedChildren)
         console.log('Not dropped children:', notDroppedChildren)
         renderCharts(droppedChildren, notDroppedChildren)
+
+        // Update the list of not dropped students
+        const notDroppedStudents = filteredData.filter(child => !child.checked).map(child => child.name)
+        const notDroppedList = document.getElementById('notDroppedStudents')
+        notDroppedList.innerHTML = ''
+        if (notDroppedStudents.length === 0) {
+          notDroppedList.innerHTML = '<li>No students not dropped at home</li>'
+        } else {
+          notDroppedStudents.forEach(name => {
+            const li = document.createElement('li')
+            li.textContent = name
+            notDroppedList.appendChild(li)
+          })
+        }
       }
 
       // Initial render with most recent date

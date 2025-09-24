@@ -17,7 +17,7 @@ const CONFIG = {
     TO: '+256775820129'
   },
   TIMEOUTS: {
-    ALERT_MESSAGE: 100000
+    ALERT_MESSAGE: 3000
   }
 };
 
@@ -37,7 +37,7 @@ const Utils = {
     const alertDiv = document.createElement('div');
     alertDiv.className = 'alert-message';
     alertDiv.textContent = message;
-    //alertDiv.style.cssText = 'position: relative; background: #eae6e6ff; color: Black; padding: 15px; border-radius: 5px; z-index: 1000;';
+    alertDiv.style.cssText = 'position: relative; background: #eae6e6ff; color: Black; padding: 15px; border-radius: 5px; z-index: 1000;';
     document.body.appendChild(alertDiv);
     
     setTimeout(() => alertDiv.remove(), duration);
@@ -127,10 +127,11 @@ const APIService = {
 // Student Management Module
 const StudentManager = {
   students: [],
-  
+
   init() {
     this.bindEvents();
     this.loadFromStorage();
+    this.fetchAndRenderStudents();
   },
   
   bindEvents() {
@@ -197,10 +198,42 @@ const StudentManager = {
     const teachers = document.querySelectorAll('.nameDisplay .tickBox');
     teachers.forEach(teacher => {
       const teacherName = teacher.textContent.toLowerCase();
-      teacher.parentElement.style.display = teacherName.includes(query.toLowerCase()) 
-        ? 'block' 
+      teacher.parentElement.style.display = teacherName.includes(query.toLowerCase())
+        ? 'block'
         : 'none';
     });
+  },
+
+  async fetchAndRenderStudents() {
+    try {
+      this.students = await APIService.fetchStudents();
+      this.renderStudents(this.students);
+    } catch (error) {
+      Utils.showAlert('Failed to fetch students');
+    }
+  },
+
+  renderStudents(students) {
+    const nameDisplay = document.querySelector('.nameDisplay');
+    nameDisplay.innerHTML = '<p class="alertMessage"></p>'; // keep the alert message
+
+    students.forEach((student, index) => {
+      const label = document.createElement('label');
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.className = 'tickBox';
+      checkbox.checked = false;  // Ensure checkbox is not ticked immediately after adding a student
+      const nameSpan = document.createElement('span');
+      nameSpan.textContent = `${student.firstName} ${student.lastName}`;
+      label.appendChild(checkbox);
+      label.appendChild(nameSpan);
+      nameDisplay.appendChild(label);
+    });
+
+    // Re-bind events after rendering
+    this.bindEvents();
+    // Load storage state
+    this.loadFromStorage();
   }
 };
 
