@@ -1,5 +1,6 @@
 {
     "dependencies": {
+        "bcrypt": "^6.0.0",
         "chart.js": "^4.4.9",
         "cors": "^2.8.5",
         "express": "^4.21.2",

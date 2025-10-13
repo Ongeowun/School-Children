@@ -6,13 +6,68 @@
  const http = require('http');
  const path = require('path');
  //const {parse} = require('json2csv'); //Converts JSON to CSV
-
+ const bcrypt = require('bcrypt');
 
  const app = express();
  app.use(express.json());
  app.use(cors({
   origin: 'http://127.0.0.1:5500'
  }));
+
+ const USERS_FILE = 'users.json';
+ 
+// Helper to read users
+function readUsers() {
+  if (!fs.existsSync(USERS_FILE)) return []
+  return JSON.parse(fs.readFileSync(USERS_FILE));
+}
+
+//Helper to write users 
+function writeUsers(users) {
+  fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+}
+
+//Registration endpoint
+
+app.post('/register', async(req, res) => {
+  const { username, password } = req.body;
+  if (!username || !password) return res.status(400).json({ error: 'Username and password are required' });
+  
+  const users = readUsers();
+  if (users.find(user => user.username === username)) {
+    return res.status(400).json({ error: 'Username already exists' });
+  }
+
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    users.push({ username, password: hashedPassword });
+    writeUsers(users);
+    res.json({ message: 'User registered successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error registering user' });
+  }
+})
+
+  const users = readUsers();
+  if (users.find(user => user.username === username)) {
+    return res.status(400).json({ error: 'Username already exists' });
+  }
+
+  //login endpoint
+  app.post('/login', async(req, res) => {
+    const { username, password } = req.body;
+    const users = readUsers();
+    const user = users.find(user => user.username === username && user.password === password);
+    if (!user) return res.status(401).json({ error: 'Invalid username or password' });
+    try {
+      const match = await bcrypt.compare(password, user.password);
+      if (!match) return res.status(401).json({ error: 'Invalid username or password' });
+      res.status(200).json({ message: 'Login successful' });
+    } catch (error) {
+    res.status(500).json({ message: 'Error logging in' });
+    }
+  });
+
 
  const accountSid = 'AC9b144a2ec2e7e0e9e34f819491e8aacc';
  const authTokenId = 'a0f081366acb5159746f98c24a5a84c2';

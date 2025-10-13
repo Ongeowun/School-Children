@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register</title>
+  <link rel="stylesheet" href="schoolchildren.css">
+</head>
+<body>
+  <div class="login-container">
+    <h2>Register</h2>
+    <form id="registerForm">
+      <label>Username</label>
+      <input type="text" id="regUsername" required>
+      <label>Password</label>
+      <input type="password" id="regPassword" required>
+      <div class="error" id="registerError"></div>
+      <button type="submit">Register</button>
+    </form>
+    <p>Already have an account? <a href="login.html">Login</a></p>
+  </div>
+  <script>
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const username = document.getElementById('regUsername').value.trim();
+      const password = document.getElementById('regPassword').value.trim();
+      const errorDiv = document.getElementById('registerError');
+      errorDiv.textContent = '';
+      fetch('http://localhost:5500/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.message === 'Registration successful.') {
+          window.location.href = 'login.html';
+        } else {
+          errorDiv.textContent = data.message;
+        }
+      })
+      .catch(() => errorDiv.textContent = 'Registration failed.');
+    });
+  </script>
+</body>
+</html>
