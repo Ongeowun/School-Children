@@ -244,3 +244,47 @@ footer {
   padding: 0.5em;
   background-color: rgb(100, 227, 227);
 }
+/*Registration and Login Page*/
+
+.login-container {
+  display: flex;
+  position: relative;
+  justify-content: inline;
+  width: 18em;
+  height: 25em;
+  margin: 2.5em;
+  font-size: 1em;
+  background: aliceblue;
+  border-radius: 15px;
+  -webkit-box-shadow: 3px 3px 8px rgb(114, 113, 111), -3px -3px 8px #ffffff;
+  box-shadow:  3px 3px  8px rgb(114, 113, 111),
+              -3px -3px  8px #ffffff;
+}
+
+.logoReg {
+justify-content: inline-block;
+margin-top: 2em;
+margin-left: 5em;
+}
+.login {
+  position: absolute;
+  margin-top: 5em;
+  margin-left: 5em;
+}
+#username, #password, #regUsername, #regPassword {
+  border-radius: 10em;
+}
+
+#loginForm {
+  display: inline;
+  margin-top: 10em;
+  gap: 2em;
+  justify-content: space-between;
+}
+
+.loginBtn {
+  font-weight: 600;
+  border: #ffffff;
+  margin-top: 2em;
+  width: 5em;
+}

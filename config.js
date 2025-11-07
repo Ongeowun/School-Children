@@ -3,6 +3,8 @@
  * Centralizes all configuration values and environment variables
  */
 
+const { TrustProductsChannelEndpointAssignmentContextImpl } = require('twilio/lib/rest/trusthub/v1/trustProducts/trustProductsChannelEndpointAssignment');
+
 require('dotenv').config();
 
 const config = {
@@ -14,9 +16,9 @@ const config = {
 
   // Twilio configuration
   twilio: {
-    accountSid: process.env.TWILIO_ACCOUNT_SID,
-    authToken: process.env.TWILIO_AUTH_TOKEN,
-    phoneNumber: process.env.TWILIO_PHONE_NUMBER
+    accountSid: process.env.TWILIO_ACCOUNT_SID || null,
+    authToken: process.env.TWILIO_AUTH_TOKEN || null,
+    phoneNumber: process.env.TWILIO_PHONE_NUMBER || null
   },
 
   // File paths
@@ -34,12 +36,15 @@ const config = {
   }
 };
 
-// Validate required environment variables
-const requiredEnvVars = ['TWILIO_ACCOUNT_SID', 'TWILIO_AUTH_TOKEN', 'TWILIO_PHONE_NUMBER'];
-for (const envVar of requiredEnvVars) {
-  if (!process.env[envVar]) {
-    throw new Error(`Missing required environment variable: ${envVar}`);
+// Validate required environment variables, only if Twilio is enabled
+if (process.env.TWILIO_ENABLED === 'true') {
+  const requiredEnvVars = ['TWILIO_ACCOUNT_SID', 'TWILIO_AUTH_TOKEN', 'TWILIO_PHONE_NUMBER'];
+  for (const envVar of requiredEnvVars) {
+     if (!process.env[envVar]) {
+     throw new Error(`Missing required environment variable: ${envVar}`);
+   }
   }
 }
+
 
 module.exports = config;

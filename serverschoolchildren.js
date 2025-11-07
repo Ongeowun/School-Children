@@ -1,4 +1,4 @@
- const twilio = require('twilio');
+// const twilio = require('twilio');
  const express = require('express');
  const cors = require('cors');
  const bodyParser = require('body-parser');
@@ -7,12 +7,29 @@
  const path = require('path');
  //const {parse} = require('json2csv'); //Converts JSON to CSV
  const bcrypt = require('bcrypt');
+ const config = require ('./config');
 
  const app = express();
  app.use(express.json());
  app.use(cors({
   origin: 'http://127.0.0.1:5500'
  }));
+
+// Safe Twilio init (optional)
+let twilioClient = null;
+if (config.twilio && config.twilio.accountSid && config.twilio.authToken) {
+  try {
+    const twilioLib = require('twilio'); // install with: npm install twilio
+    twilioClient = twilioLib(config.twilio.accountSid, config.twilio.authToken);
+    console.log('Twilio client initialized');
+  } catch (err) {
+    console.warn('Twilio library not available or failed to init:', err.message);
+    twilioClient = null;
+  }
+} else {
+  console.log('Twilio credentials not provided; Twilio disabled');
+}
+
 
  const USERS_FILE = 'users.json';
  
@@ -44,14 +61,10 @@ app.post('/register', async(req, res) => {
     writeUsers(users);
     res.json({ message: 'User registered successfully' });
   } catch (error) {
+    console.error('Error registering user:', error);
     res.status(500).json({ error: 'Error registering user' });
   }
 })
-
-  const users = readUsers();
-  if (users.find(user => user.username === username)) {
-    return res.status(400).json({ error: 'Username already exists' });
-  }
 
   //login endpoint
   app.post('/login', async(req, res) => {
@@ -261,7 +274,7 @@ app.get('/download-csv', (req, res) => {
   })
 })
 
-app.listen(5500, () => {
-  console.log('Listening on port 5500');
-});
+//app.listen(5500, () => {
+  //console.log('Listening on port 5500');
+//});
 

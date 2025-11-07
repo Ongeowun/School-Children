@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const notDroppedList = document.getElementById('notDroppedStudents')
         notDroppedList.innerHTML = ''
         if (notDroppedStudents.length === 0) {
-          notDroppedList.innerHTML = '<li>No students not dropped at home</li>'
+          notDroppedList.innerHTML = '<li>No students dropped at home</li>'
         } else {
           notDroppedStudents.forEach(name => {
             const li = document.createElement('li')

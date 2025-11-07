@@ -7,16 +7,17 @@
 </head>
 <body>
   <div class="login-container">
-    <h2>Login</h2>
+   <h2 class="logoReg">ORCA</h2>
+    <h2 class="login">Login</h2>
     <form id="loginForm">
       <label>Username</label>
       <input type="text" id="username" required>
       <label>Password</label>
       <input type="password" id="password" required>
       <div class="error" id="loginError"></div>
-      <button type="submit">Login</button>
+      <button class="loginBtn" type="submit">LOGIN</button>
     </form>
-    <p>Don't have an account? <a href="register.html">Register</a></p>
+    <p class="linkText">Don't have an account? <a href="register.html">Register</a></p>
   </div>
   <script>
     document.getElementById('loginForm').addEventListener('submit', function(e) {

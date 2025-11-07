@@ -3,10 +3,11 @@
         "bcrypt": "^6.0.0",
         "chart.js": "^4.4.9",
         "cors": "^2.8.5",
+        "dotenv": "^17.2.3",
         "express": "^4.21.2",
         "json2csv": "^6.0.0-alpha.2",
         "npm": "^11.0.0",
-        "twilio": "^5.4.5"
+        "twilio": "^5.10.4"
     },
     "name": "desktop",
     "version": "1.0.0",
@@ -17,5 +18,13 @@
     "keywords": [],
     "author": "",
     "license": "ISC",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Ongeowun/School-Children.git"
+    },
+    "bugs": {
+        "url": "https://github.com/Ongeowun/School-Children/issues"
+    },
+    "homepage": "https://github.com/Ongeowun/School-Children#readme",
     "description": ""
 }

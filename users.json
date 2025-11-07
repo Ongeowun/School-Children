@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "username": "okellopaul",
+    "password": "$2b$10$oU.mivI1sRDKGjWnm1uFs.dlUkilfRFFASZEx9VYE3ABxZcfajlMK"
+  },
+  {
+    "username": "paul",
+    "password": "$2b$10$WPMzpiYRqaJbHeIHRwzSi.j33MoJAh/aGbzNDmVMFlf3ZkjKruwxe"
+  },
+  {
+    "username": "aliceblack",
+    "password": "$2b$10$KvzQyrj0u7oqLugTEaRwDu8CVPK62Lo2t3A8qb5k7e3Uwj5dgruJ6"
+  }
+]
