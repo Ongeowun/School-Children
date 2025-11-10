@@ -33,107 +33,157 @@ if (config.twilio && config.twilio.accountSid && config.twilio.authToken) {
 
  const USERS_FILE = 'users.json';
  
-// Helper to read users
+// Helper functions for user management
 function readUsers() {
-  if (!fs.existsSync(USERS_FILE)) return []
-  return JSON.parse(fs.readFileSync(USERS_FILE));
+  try {
+    if (!fs.existsSync(USERS_FILE)) {
+      fs.writeFileSync(USERS_FILE, '[]', 'utf8');
+      return [];
+    }
+    const data = fs.readFileSync(USERS_FILE, 'utf8');
+    return JSON.parse(data || '[]');
+  } catch (err) {
+    console.error('Error reading users:', err);
+    return [];
+  }
 }
 
-//Helper to write users 
 function writeUsers(users) {
-  fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+  try {
+    fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2), 'utf8');
+    return true;
+  } catch (err) {
+    console.error('Error writing users:', err);
+    return false;
+  }
 }
 
 //Registration endpoint
 
-app.post('/register', async(req, res) => {
-  const { username, password } = req.body;
-  if (!username || !password) return res.status(400).json({ error: 'Username and password are required' });
-  
-  const users = readUsers();
-  if (users.find(user => user.username === username)) {
-    return res.status(400).json({ error: 'Username already exists' });
-  }
-
+app.post('/register', async (req, res) => {
   try {
+    const { username, password } = req.body;
+    
+    if (!username || !password) {
+      return res.status(400).json({ 
+        message: 'Username and password are required' 
+      });
+    }
+
+    const users = readUsers();
+    
+    // Check if username already exists
+    if (users.find(u => u.username === username)) {
+      return res.status(409).json({ 
+        message: 'Username already exists' 
+      });
+    }
+
+    // Hash password and save user
     const hashedPassword = await bcrypt.hash(password, 10);
-    users.push({ username, password: hashedPassword });
-    writeUsers(users);
-    res.json({ message: 'User registered successfully' });
-  } catch (error) {
-    console.error('Error registering user:', error);
-    res.status(500).json({ error: 'Error registering user' });
+    users.push({
+      username,
+      password: hashedPassword
+    });
+
+    if (!writeUsers(users)) {
+      return res.status(500).json({ 
+        message: 'Error saving user' 
+      });
+    }
+
+     res.status(201).json({ 
+      message: 'User registered successfully' 
+    });
+  } catch (err) {
+    console.error('Registration error:', err);
+    res.status(500).json({ 
+      message: 'Internal server error' 
+    });
   }
-})
+});
 
   //login endpoint
-  app.post('/login', async(req, res) => {
-    const { username, password } = req.body;
-    const users = readUsers();
-    const user = users.find(user => user.username === username && user.password === password);
-    if (!user) return res.status(401).json({ error: 'Invalid username or password' });
-    try {
-      const match = await bcrypt.compare(password, user.password);
-      if (!match) return res.status(401).json({ error: 'Invalid username or password' });
-      res.status(200).json({ message: 'Login successful' });
-    } catch (error) {
-    res.status(500).json({ message: 'Error logging in' });
+app.post('/login', async (req, res) => {
+  try {
+    console.log('--- /login request ---');
+    console.log('Headers:', req.headers);
+    console.log('Body:', req.body);
+
+    const { username, password } = req.body || {};
+    if (!username || !password) {
+      console.log('Login failed: missing username or password');
+      return res.status(400).json({ message: 'Username and password required.' });
     }
-  });
+
+    const users = readUsers();
+    const user = users.find(u => u.username === username);
+    console.log('Found user:', !!user, 'username:', username);
+
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid credentials.' });
+    }
+
+    const match = await bcrypt.compare(password, user.password);
+    console.log('Password match:', match);
+
+    if (!match) {
+      return res.status(401).json({ message: 'Invalid credentials.' });
+    }
+
+    console.log('Login successful for user:', username);
+    return res.json({ message: 'Login successful.' });
+  } catch (err) {
+    console.error('Login error:', err);
+    return res.status(500).json({ message: 'Error logging in.' });
+  }
+});
 
 
- const accountSid = 'AC9b144a2ec2e7e0e9e34f819491e8aacc';
- const authTokenId = 'a0f081366acb5159746f98c24a5a84c2';
- const client = twilio(accountSid, authTokenId);
 
- app.post('/send-text', (req, res) => {
-  const { body, from, to } = req.body;
+ //const accountSid = 'AC9b144a2ec2e7e0e9e34f819491e8aacc';
+ //const authTokenId = 'a0f081366acb5159746f98c24a5a84c2';
 
-  client.messages.create({
+ app.post('/send-text', async (req, res) => {
+  if(!twilioClient) {
+    return res.status(501).json({ error: 'Twilio is not configured' });
+  }
+  const { body, from, to } = req.body || {};
+   if (!body || !from || !to) 
+   return res.status(400).json({ error: 'Missing required fields: body, from, to' });
+
+  try {
+    const msg = await twilioClient.messages.create({ body, from, to });
+   const messageDetails = {
+    sid: msg.sid,
     body: body,
     from: from,
-    to: to
-  })
-  .then(message => {
-    //save the details
-    const messageDetails = {
-      sid: message.sid,
-      body: body,
-      from: from,
-      to: to,
-      timestamp: new Date().toLocaleString() //Built in Date Objective.
+    to: to,
+    timestamp: new Date().toLocaleString() //Built in Date Objective.
+   }
+    try {
+      fs.appendFileSync('messageDetails.json', JSON.stringify(messageDetails) + '\n', "utf8")
+    } catch (err) {
+      console.log( `Error writing to file: ${err}`);
     }
-    fs.appendFileSync('messageDetails.json', JSON.stringify(messageDetails) + '\n', err => {
-      if (err) {
-        console.log( `Error writing to file: ${err}`);
-    } ;
+    return res.json ({ success: true, sid: msg.sid });
+   } catch (error) {
+    console.error('Error sending SMS via Twilio:', error);
+    return res.status(500).json({ error: 'Failed to send SMS' });
+   }
+   
   });
-    res.writeHead(200, {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': 'http://127.0.0.1:5500',
-    });
-    res.end(JSON.stringify({ sid: message.sid }));
-  })
-  .catch(err => {
-    res.writeHead(500, {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': 'http://127.0.0.1:5500',
-    });
-    res.end(JSON.stringify({ error: err.message }));
-  });
- });
 
 
+    // Backend code to save the click buttons
+    //Route to save clicked buttons
+    app.post('/save-data', (req, res) => {
+    const { name, message, checked, timestamp } = req.body;
 
-  // Backend code to save the click buttons
-  //Route to save clicked buttons
- app.post('/save-data', (req, res) => {
-  const { name, message, checked, timestamp } = req.body;
-
- //validate the data and request
-  if (!name || !message || typeof checked === 'undefined' || !timestamp) {
+   //validate the data and request
+    if (!name || !message || typeof checked === 'undefined' || !timestamp) {
     return res.status(400).json({ error: 'Invalid data' });
-  }
+    }
 
  //save the data
  const data = {name,message,checked,timestamp};
@@ -274,7 +324,20 @@ app.get('/download-csv', (req, res) => {
   })
 })
 
-//app.listen(5500, () => {
-  //console.log('Listening on port 5500');
-//});
+// ...existing code...
+
+// Start server with proper error handling
+const PORT = (config.server && config.server.port) || 5500;
+const server = app.listen(PORT, () => {
+  console.log(`Server listening on http://localhost:${PORT}`);
+});
+
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`Port ${PORT} is already in use. Stop other process or set PORT env var.`);
+    process.exit(1);
+  } else {
+    throw err;
+  }
+});
 

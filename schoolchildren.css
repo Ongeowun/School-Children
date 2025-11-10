@@ -1,5 +1,6 @@
 
 /*pop up form for uploading students info*/
+/* General Styles Primary Color rgba(45, 171, 108, 0.749) */
 body {
   background-color: aliceblue;
 }
@@ -123,6 +124,7 @@ height: 2em;
 
 .nameDisplay label {
   display: block;
+  font-weight: 600;
 }
 .alertMessage, .alert-message {
   background: aliceblue;
@@ -156,6 +158,7 @@ height: 2em;
 }
 .mainPage{
   cursor: pointer;
+  color: rgba(45, 171, 108, 0.749);
 }
   canvas {
     width: 100%;
@@ -246,12 +249,25 @@ footer {
 }
 /*Registration and Login Page*/
 
-.login-container {
+.allBody {
   display: flex;
-  position: relative;
-  justify-content: inline;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  background: aliceblue;
+}
+
+
+.login-container {
+  margin: 1em;
+  gap: 0.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 2em;
   width: 18em;
-  height: 25em;
+  height: auto;
   margin: 2.5em;
   font-size: 1em;
   background: aliceblue;
@@ -262,29 +278,39 @@ footer {
 }
 
 .logoReg {
-justify-content: inline-block;
-margin-top: 2em;
-margin-left: 5em;
+margin: 0;
+font-size: 1.5rem;
+text-align: center;
+color: rgba(45, 171, 108, 0.749);
 }
 .login {
-  position: absolute;
-  margin-top: 5em;
-  margin-left: 5em;
+margin: 0;
+font-size: 1.5rem;
 }
 #username, #password, #regUsername, #regPassword {
   border-radius: 10em;
+  margin: 0.5em;
+}
+#password {
+  margin-top: 1em;
 }
 
-#loginForm {
+#loginForm, registerForm {
   display: inline;
-  margin-top: 10em;
   gap: 2em;
   justify-content: space-between;
 }
 
-.loginBtn {
+.loginBtn, .registerBtn {
+  display: block;
+  text-align: center;
   font-weight: 600;
   border: #ffffff;
-  margin-top: 2em;
   width: 5em;
+  background: rgba(45, 171, 108, 0.749);
+  border-radius: 5em;
+  cursor: pointer;
+  font-size: 1em;
+  margin: 2em;
+  margin-left: 6.5em;
 }
