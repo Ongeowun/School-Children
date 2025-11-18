@@ -107,38 +107,72 @@ document.addEventListener('DOMContentLoaded', () => {
       dateDropdownContainer.appendChild(selectEl)
 
       // Function to filter data by selected date and update charts
-      function updateChartsByDate(selectedDate) {
-        const filteredData = data.filter(item => {
-          if (item.timestamp) {
-            const datePart = item.timestamp.split(',')[0].trim()
-            return datePart === selectedDate
-          }
-          return false
-        })
-        const droppedChildren = filteredData.filter(child => child.checked).length
-        // Calculate notDroppedChildren by counting children who are not checked for the selected date
-        const droppedStudentNames = new Set(filteredData.filter(child => child.checked).map(child => child.name))
-        const notDroppedChildren = filteredData.filter(child => !child.checked).length
-        console.log('Filtered data length:', filteredData.length)
-        console.log('Dropped children:', droppedChildren)
-        console.log('Not dropped children:', notDroppedChildren)
-        renderCharts(droppedChildren, notDroppedChildren)
+      // ...existing code...
+function updateChartsByDate(selectedDate) {
+  // filter records for the selected date
+  const filteredData = data.filter(item => {
+    if (!item.timestamp) return false;
+    const datePart = item.timestamp.split(',')[0].trim();
+    return datePart === selectedDate;
+  });
 
-        // Update the list of not dropped students
-        const notDroppedStudents = filteredData.filter(child => !child.checked).map(child => child.name)
-        const notDroppedList = document.getElementById('notDroppedStudents')
-        notDroppedList.innerHTML = ''
-        if (notDroppedStudents.length === 0) {
-          notDroppedList.innerHTML = '<li>No students dropped at home</li>'
-        } else {
-          notDroppedStudents.forEach(name => {
-            const li = document.createElement('li')
-            li.textContent = name
-            notDroppedList.appendChild(li)
-          })
-        }
+  // keep latest record per student name (in case of multiple entries)
+  const statusByName = new Map();
+  filteredData.forEach(item => {
+    const name = item.name || `${item.firstName || ''} ${item.lastName || ''}`.trim();
+    const ts = Date.parse(item.timestamp) || 0;
+    const existing = statusByName.get(name);
+    if (!existing || ts > existing.ts) {
+      statusByName.set(name, { checked: !!item.checked, ts });
+    }
+  });
+
+  let droppedChildren = 0;
+  let notDroppedChildren = 0;
+  const notDroppedStudents = [];
+
+  // use the students list to determine everyone (students from fetch)
+  students.forEach(s => {
+    const fullName = s.fullName || `${s.firstName || ''} ${s.lastName || ''}`.trim();
+    const status = statusByName.get(fullName);
+    if (status) {
+      if (status.checked) droppedChildren++;
+      else {
+        notDroppedChildren++;
+        notDroppedStudents.push(fullName);
       }
+    } else {
+      // no record for this student on selected date => treat as not dropped
+      notDroppedChildren++;
+      notDroppedStudents.push(fullName);
+    }
+  });
 
+  console.log('Filtered data length:', filteredData.length);
+  console.log('Dropped children:', droppedChildren);
+  console.log('Not dropped children:', notDroppedChildren);
+
+  renderCharts(droppedChildren, notDroppedChildren);
+
+  // update the list in DOM only if the element exists
+  const notDroppedList = document.getElementById('notDroppedStudents');
+  if (!notDroppedList) {
+    console.warn('Element #notDroppedStudents not found in DOM; skipping list update.');
+    return;
+  }
+
+  notDroppedList.innerHTML = '';
+  if (notDroppedStudents.length === 0) {
+    notDroppedList.innerHTML = '<li>No students dropped at home</li>';
+  } else {
+    notDroppedStudents.forEach(name => {
+      const li = document.createElement('li');
+      li.textContent = name;
+      notDroppedList.appendChild(li);
+    });
+  }
+}
+// ...existing code...
       // Initial render with most recent date
       if (uniqueDates.length > 0) {
         updateChartsByDate(uniqueDates[0])

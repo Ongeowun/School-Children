@@ -163,17 +163,64 @@ const StudentManager = {
     }
   },
   
-  loadFromStorage() {
-    const checkboxes = document.querySelectorAll('.tickBox');
-    checkboxes.forEach((checkbox, index) => {
-      const storageKey = Utils.createStorageKey('dropped', index);
-      if (localStorage.getItem(storageKey) === 'true') {
-        checkbox.checked = true;
+loadFromStorage() {
+  const checkboxes = document.querySelectorAll('.tickBox');
+  checkboxes.forEach((checkbox, index) => {
+    const storageKey = Utils.createStorageKey('dropped', index);
+    
+    // Load previously saved state
+    if (localStorage.getItem(storageKey) === 'true') {
+      checkbox.checked = true;
+      checkbox.disabled = true;
+    }
+  });
+},
+
+// Move the change event listener to a separate method
+bindCheckboxEvents() {
+  const checkboxes = document.querySelectorAll('.tickBox');
+  checkboxes.forEach((checkbox, index) => {
+    const storageKey = Utils.createStorageKey('dropped', index);
+    
+    checkbox.addEventListener('change', (e) => {
+      if (e.target.checked) {
+        // Show custom alert using .alertMessage class
+        const alertDiv = document.createElement('div');
+        alertDiv.className = 'alertMessage';
+        alertDiv.textContent = `You have dropped ${checkbox.parentElement.textContent.trim()} at home`;
+        document.body.appendChild(alertDiv);
+
+        // Auto-hide after 3 seconds
+        setTimeout(() => {
+          alertDiv.remove();
+        }, 3000);
+
+        // Disable checkbox and save to storage
         checkbox.disabled = true;
+        localStorage.setItem(storageKey, 'true');
+
+        // Save to backend
+        const data = {
+          name: checkbox.parentElement.textContent.trim(),
+          message: 'Your child has been dropped at home',
+          checked: true,
+          timestamp: Utils.formatTimestamp()
+        };
+        
+        APIService.saveStudentData(data)
+          .catch(error => Utils.logError(error, 'saveStudentData'));
       }
     });
-  },
-  
+  });
+},
+
+init() {
+  this.bindCheckboxEvents();  // Call the new method
+  this.loadFromStorage();
+  this.fetchAndRenderStudents();
+},
+
+// ...existing code...
   searchStudents(query) {
     const students = document.querySelectorAll('.nameDisplay .tickBox');
     const displayArea = document.querySelector('.displaySearchedName');
