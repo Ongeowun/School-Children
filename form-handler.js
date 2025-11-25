@@ -12,6 +12,7 @@ class FormHandler {
   init() {
     this.form = document.getElementById('studentForm');
     if (this.form) {
+      
       this.bindEvents();
     }
   }

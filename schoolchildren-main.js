@@ -4,6 +4,9 @@
  */
 
 // Configuration object for centralized settings
+
+
+
 const CONFIG = {
   API_ENDPOINTS: {
     SEND_TEXT: 'http://localhost:5500/send-text',
@@ -37,7 +40,6 @@ const Utils = {
     const alertDiv = document.createElement('div');
     alertDiv.className = 'alert-message';
     alertDiv.textContent = message;
-    alertDiv.style.cssText = 'position: relative; background: #eae6e6ff; color: Black; padding: 15px; border-radius: 5px; z-index: 1000;';
     document.body.appendChild(alertDiv);
     
     setTimeout(() => alertDiv.remove(), duration);
@@ -382,4 +384,68 @@ const SchoolChildrenApp = {
 // Initialize the application when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
   SchoolChildrenApp.init();
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const orcaBtn = document.querySelector('.OrcaPickUp');
+  const dropDown = document.querySelector('.orca-dropdown');
+
+  if (!orcaBtn || !dropDown) return; 
+
+    function openDropdown() {
+      dropDown.classList.add('open');
+      orcaBtn.setAttribute('aria-expanded', 'true');
+      dropDown.setAttribute('aria-hidden', 'false');
+    }
+    function closeDropdown() {
+      dropDown.classList.remove('open');
+      orcaBtn.setAttribute('aria-expanded', 'false');
+      dropDown.setAttribute('aria-hidden', 'true');
+    }
+   function toggleDropdown() {
+    dropDown.classList.toggle('open');
+    const opened = dropDown.classList.contains('open');
+    orcaBtn.setAttribute('aria-expanded', opened ? 'true' : 'false');
+    dropDown.setAttribute('aria-hidden', opened ? 'false' : 'true');
+   }
+    orcaBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleDropdown();
+    });
+    //Key Board accessibility
+    orcaBtn.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleDropdown();
+      } else if (e.key === 'ArrowDown') {
+        closeDropdown();
+      }
+    });
+
+    //options selection
+    dropDown.addEventListener('click', (e) => {
+      const li = e.target.closest('li');
+      if (!li) return;
+      const value = li.dataset.value;
+      const label = li.textContent.trim();
+
+      orcaBtn.childNodes[0].nodeValue = `ORCA PICKUP — ${label}`//for the caret span
+      closeDropdown();
+
+      // If User chooses an option, populate the hidden input
+      if (value === 'uber' || value === 'safeboda') {
+        try { localStorage.setItem('orca_pickup_option', value); } catch (error) {}
+        window.location.href = `order-pickup.html`?option=${encodeURIComponent(value)};`;
+      } 
+
+
+    document.addEventListener('click', (e) => {
+        if (!dropDown.contains(e.target) && !btn.contains(e.target)) closeDropdown();
+       });
+
+    });
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (e.key === 'Escape') closeDropdown();
+    });
 });

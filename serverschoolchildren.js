@@ -144,35 +144,78 @@ app.post('/login', async (req, res) => {
  //const accountSid = 'AC9b144a2ec2e7e0e9e34f819491e8aacc';
  //const authTokenId = 'a0f081366acb5159746f98c24a5a84c2';
 
+function findStudentByName(fullName, lastName) {
+  try {
+    const STUDENTS_FILE = 'studentsdata.csv';
+    if (!fs.existsSync(STUDENTS_FILE)) return null;
+
+    const data = fs.readFileSync(STUDENTS_FILE, 'utf8').trim();
+    if (!data) return null;
+
+    const lines = data.split('\n').filter(Boolean).slice(1); 
+    for (const line of lines) {
+      const cols = parseCsvLine(line);
+      if ( cols[0]?.trim().toLowerCase() === firstNameName.toLowerCase() && 
+            cols[1]?.trim().toLowerCase() === lastName.toLowerCase()) {
+        return {
+           firstName: cols[0]?.trim(),
+            lastName: cols[1]?.trim(),
+            class: cols[2]?.trim(),
+            parentsContacts: cols[6]?.trim() //Parents contacts.
+             }
+            }
+         }
+         return null;
+  } catch (err) {
+    console.error('Error finding student:', err);
+    return null;
+  }
+} 
+
  app.post('/send-text', async (req, res) => {
   if(!twilioClient) {
     return res.status(501).json({ error: 'Twilio is not configured' });
   }
-  const { body, from, to } = req.body || {};
-   if (!body || !from || !to) 
-   return res.status(400).json({ error: 'Missing required fields: body, from, to' });
+   const { firstName, lastName, message } = req.body || {};
+   if (!firstName || !lastName || !message) {
+    return res.status(400).json({ error: 'First name, last name, and message are required' });
+   }
+     
+   const parentsNumber =  student?.parentsContacts;
+   const fromNumber = config.twilio.phoneNumber;
 
-  try {
-    const msg = await twilioClient.messages.create({ body, from, to });
-   const messageDetails = {
-    sid: msg.sid,
-    body: body,
-    from: from,
-    to: to,
-    timestamp: new Date().toLocaleString() //Built in Date Objective.
+   if (!fromNumber) {
+    return res.status(500).json({ error: 'Twilio from phone number is not configured' });
    }
-    try {
-      fs.appendFileSync('messageDetails.json', JSON.stringify(messageDetails) + '\n', "utf8")
-    } catch (err) {
-      console.log( `Error writing to file: ${err}`);
-    }
-    return res.json ({ success: true, sid: msg.sid });
-   } catch (error) {
-    console.error('Error sending SMS via Twilio:', error);
-    return res.status(500).json({ error: 'Failed to send SMS' });
+
+   try {
+    const msg = await twilioClient.messages.create({
+      body: message,
+      from: fromNumber,
+      to: parentsNumber
+    });
+     const messageDetails = {
+      sid: msg.sid,
+      to: parentsNumber,
+      from: fromNumber,
+      body: message,
+      student: `${firstName} ${lastName}`,
+      timestamp: new Date().toISOString()
+     };
+
+     fs.appendFileSync('messageDetails.json', JSON.stringify(messageDetails) + '\n', 'utf8');
+      
+     return res.json({
+      message: 'Text message sent successfully',
+      sid: msg.sid,
+      sentTo: parentsNumber
+     });
+   } catch (err) {
+    console.error('Error sending text message:', err);
+    return res.status(500).json({ error: 'Failed to send text message' });
    }
-   
-  });
+ });
+
 
 
     // Backend code to save the click buttons

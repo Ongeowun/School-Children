@@ -1,0 +1,183 @@
+<!-- ...existing code... -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>ORCA PICKUP</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="schoolchildren.css" />
+</head>
+<body class="allBody">
+         <header>
+            <h2 class="mainPage">ORCA</h2>
+            <h2 class="makePayments"></h2>
+            <h2 class="dashboard"></h2>
+             <div class="orca-pickup-wrapper">
+               <h2 id="orcaPickUpBtn" class="OrcaPickUp" role="button" tabindex="0" aria-expanded="false">
+               ORCA PICKUP <span class="orca-caret">▾</span>
+               </h2>
+               <ul id="orcaDropdown" class="orca-dropdown" aria-hidden="true" role="menu">
+               <li role="menuitem" data-value="uber">SafeBoda</li>
+               <li role="menuitem" data-value="safeboda">Uber</li>
+               </ul>
+             </div>
+            <button type="button" class="downloadButton">DOWNLOAD</button>
+        </header>
+
+  <main class="order-container">
+    <h3>Order an Uber</h3>
+
+    <form id="orderForm" class="order-form" autocomplete="off">
+      <label for="childSelect">Child</label>
+      <select id="childSelect" name="childName" required>
+        <option value="">Loading students…</option>
+      </select>
+
+      <label for="pickupAddress">Pickup address</label>
+      <input id="pickupAddress" name="pickupAddress" type="text" required />
+
+      <label for="destination">Destination</label>
+      <input id="destination" name="destination" type="text" required />
+
+      <label for="pickupTime">Pickup time</label>
+      <input id="pickupTime" name="pickupTime" type="datetime-local" required />
+
+      <label for="contactPhone">Contact phone</label>
+      <input id="contactPhone" name="contactPhone" type="tel" required />
+
+      <div class="form-actions">
+        <button type="submit" class="submitOrderBtn">Order Uber</button>
+        <a href="schoolchildren.html" class="loginBtn" style="background:#ccc;color:#000;margin-left:8px;text-decoration:none;display:inline-block;padding:10px 14px;border-radius:8px;">Back</a>
+      </div>
+    </form>
+  </main>
+
+  <script>
+    // School address used as pickup by default (change to your actual school address)
+    const SCHOOL_ADDRESS = 'ORCA School, Main Road, Kampala';
+
+    // Simple CSV parser for lines with optional quoted fields
+    function parseCsvLine(line) {
+      const cols = [];
+      let cur = '';
+      let inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (ch === '"') {
+          if (inQuotes && line[i+1] === '"') { cur += '"'; i++; }
+          else inQuotes = !inQuotes;
+          continue;
+        }
+        if (ch === ',' && !inQuotes) { cols.push(cur); cur = ''; continue; }
+        cur += ch;
+      }
+      cols.push(cur);
+      return cols.map(c => c.trim());
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const childSelect = document.getElementById('childSelect');
+      const pickupAddress = document.getElementById('pickupAddress');
+      const destination = document.getElementById('destination');
+      const contactPhone = document.getElementById('contactPhone');
+      const form = document.getElementById('orderForm');
+
+
+      // Start with school as pickup
+      pickupAddress.value = SCHOOL_ADDRESS;
+
+      // Fetch studentsdata.csv and populate select
+      fetch('studentsdata.csv').then(r => r.text()).then(text => {
+        const lines = text.split(/\r?\n/).filter(Boolean);
+        if (lines.length <= 1) {
+          childSelect.innerHTML = '<option value="">No students found</option>';
+          return;
+        }
+        const header = parseCsvLine(lines[0].toLowerCase());
+        // find relevant column indexes
+        const idxFirst = header.findIndex(h => /first name/.test(h));
+        const idxLast = header.findIndex(h => /last name/.test(h));
+        const idxParentsContacts = header.findIndex(h => /parents contacts/i.test(h));
+        const idxParentsLocations = header.findIndex(h => /parents locations/i.test(h));
+
+        // build options
+        const opts = ['<option value="">Select child</option>'];
+        for (let i = 1; i < lines.length; i++) {
+          const cols = parseCsvLine(lines[i]);
+          const first = cols[idxFirst] || '';
+          const last = cols[idxLast] || '';
+          const full = `${first} ${last}`.trim();
+          // store parent phone and address in option dataset via value as JSON-safe index
+          const meta = {
+            parentsContacts: cols[idxParentsContacts] || '',
+            parentsLocation: cols[idxParentsLocations] || ''
+          };
+          // use index as value and keep meta in a map
+          opts.push(`<option value="${i}">${full}</option>`);
+          // attach meta map to select element for lookup later
+          childSelect.__students = childSelect.__students || {};
+          childSelect.__students[i] = meta;
+        }
+        childSelect.innerHTML = opts.join('');
+      }).catch(err => {
+        console.error('Failed to load studentsdata.csv', err);
+        childSelect.innerHTML = '<option value="">Failed to load students</option>';
+      });
+
+      // when user picks a child, auto-fill addresses and phone
+      childSelect.addEventListener('change', () => {
+        const val = childSelect.value;
+        if (!val) {
+          // reset to school pickup
+          pickupAddress.value = SCHOOL_ADDRESS;
+          destination.value = '';
+          contactPhone.value = '';
+          return;
+        }
+        const meta = (childSelect.__students || {})[val] || {};
+        // default behavior: pickup at school, destination = parent's address
+        pickupAddress.value = SCHOOL_ADDRESS;
+        destination.value = meta.parentsLocation || '';
+        contactPhone.value = meta.parentsContacts || '';
+      });
+
+      // allow swapping pickup/destination by double-clicking pickupAddress field
+      pickupAddress.addEventListener('dblclick', () => {
+        const tmp = pickupAddress.value;
+        pickupAddress.value = destination.value;
+        destination.value = tmp;
+      });
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const data = {
+          childIndex: childSelect.value,
+          childName: childSelect.options[childSelect.selectedIndex]?.text || '',
+          pickupAddress: pickupAddress.value.trim(),
+          destination: destination.value.trim(),
+          pickupTime: pickupTime.value,
+          contactPhone: contactPhone.value.trim()
+        };
+
+        // show confirmation popup using .alertMessage
+        const alertDiv = document.createElement('div');
+        alertDiv.className = 'alertMessage';
+        alertDiv.style.display = 'block';
+        alertDiv.innerHTML = `<p>Uber ordered for ${data.childName}<br/>Pickup: ${data.pickupAddress}<br/>To: ${data.destination}<br/>Time: ${new Date(data.pickupTime).toLocaleString()}</p>`;
+        document.body.appendChild(alertDiv);
+
+        setTimeout(() => {
+          alertDiv.remove();
+          window.location.href = 'schoolchildren.html';
+        }, 3000);
+
+        // Optional: send order to backend (include parent phone if needed)
+        // fetch('/order-ride', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) });
+      });
+    });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="schoolchildren-main.js" type="module"></script>
+       <script src="dashboard.js"></script>
+</body>
+</html>

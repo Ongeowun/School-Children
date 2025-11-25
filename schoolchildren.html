@@ -14,7 +14,16 @@
             <h2 class="mainPage">ORCA</h2>
             <h2 class="makePayments"></h2>
             <h2 class="dashboard"></h2>
-            <button class="downloadButton">DOWNLOAD</button>
+             <div class="orca-pickup-wrapper">
+               <h2 id="orcaPickUpBtn" class="OrcaPickUp" role="button" tabindex="0" aria-expanded="false">
+               ORCA PICKUP <span class="orca-caret">▾</span>
+               </h2>
+               <ul id="orcaDropdown" class="orca-dropdown" aria-hidden="true" role="menu">
+               <li role="menuitem" data-value="uber">SafeBoda</li>
+               <li role="menuitem" data-value="safeboda">Uber</li>
+               </ul>
+             </div>
+            <button type="button" class="downloadButton">DOWNLOAD</button>
         </header>
         <section class="schoolDetails">
                 <h2>SCHOOL NAME:</h2>
