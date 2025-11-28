@@ -14,9 +14,19 @@
             <h2 class="mainPage">ORCA</h2>
             <h2 class="makePayments"></h2>
             <h2 class="dashboard"></h2>
+                <div class="orca-pickup-wrapper">
+               <h2 id="orcaPickUpBtn" class="OrcaPickUp" role="button" tabindex="0" aria-expanded="false">
+               ORCA PICKUP <span class="orca-caret">▾</span>
+               </h2>
+               <ul id="orcaDropdown" class="orca-dropdown" aria-hidden="true" role="menu">
+               <li role="menuitem" data-value="uber">SafeBoda</li>
+               <li role="menuitem" data-value="safeboda">Uber</li>
+               </ul>
+             </div>
                <button class="downloadButton">DOWNLOAD</button>
         </header>
-        <div class="datedropdown">
+        <div class="dashboard-wrapper"> 
+            <div class="datedropdown">
             <label for="dateSelect">SELECT DATE:</label>
             <select id="status" name="status">
                 <option value="all">All</option>
@@ -24,22 +34,26 @@
                 <option value="pending">Pending</option>
                 <option value="failed">Failed</option>
             </select>
-        </div>
-        <div class="dashboard-charts">
+            </div>
+            <div class="dashboard-charts">
              <section>
-        <h2>Bar Chart: Children Drop-off status</h2>
-        <canvas id="barChart" width="50px" height="25px"></canvas>
-      </section>
-      <section>
-        <h2>Pie chart: Children Drop-off status</h2>
-        <canvas id="pieChart" width="50px" height="25px"></canvas>
-      </section>
+           <h2>Bar Chart: Children Drop-off status</h2>
+            <canvas id="barChart" width="50px" height="25px"></canvas>
+          </section>
+          <section>
+            <h2>Pie chart: Children Drop-off status</h2>
+             <canvas id="pieChart" width="50px" height="25px"></canvas>
+            </section>
+           </div>
         </div>
+      
    
           <footer>
             <p class="footerText">ORCA for School Drop off &copy; 2025</p>
           </footer>
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
       <script src="dashboard.js"></script>
+        <script src="schoolchildren-main.js" type="module"></script>
+        <script src="form-handler.js"></script>
 </body>
 </html>

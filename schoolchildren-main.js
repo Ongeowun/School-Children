@@ -435,7 +435,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // If User chooses an option, populate the hidden input
       if (value === 'uber' || value === 'safeboda') {
         try { localStorage.setItem('orca_pickup_option', value); } catch (error) {}
-        window.location.href = `order-pickup.html`?option=${encodeURIComponent(value)};`;
+        window.location.href = `order-pickup.html?option=${encodeURIComponent(value)}`;
       } 
 
 

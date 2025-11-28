@@ -17,15 +17,15 @@
                ORCA PICKUP <span class="orca-caret">▾</span>
                </h2>
                <ul id="orcaDropdown" class="orca-dropdown" aria-hidden="true" role="menu">
-               <li role="menuitem" data-value="uber">SafeBoda</li>
-               <li role="menuitem" data-value="safeboda">Uber</li>
+               <li role="menuitem" data-value="safeboda">SafeBoda</li>
+               <li role="menuitem" data-value="uber">Uber</li>
                </ul>
              </div>
             <button type="button" class="downloadButton">DOWNLOAD</button>
         </header>
 
   <main class="order-container">
-    <h3>Order an Uber</h3>
+    <h3>Order Pickup</h3>
 
     <form id="orderForm" class="order-form" autocomplete="off">
       <label for="childSelect">Child</label>
@@ -81,8 +81,31 @@
       const destination = document.getElementById('destination');
       const contactPhone = document.getElementById('contactPhone');
       const form = document.getElementById('orderForm');
+      const orderBtn = document.querySelector('.submitOrderBtn');
+      const OrcaHeader = document.querySelector('.OrcaPickUp');
+     
+      const params = new URLSearchParams(window.location.search);
+      const provider = params.get('provider') || localStorage.getItem('orcaDropDown') || '';
 
-
+      // Order Button according to the provider selected
+      
+      function orderButton(provider) {
+         
+        if(!provider) return;
+        const titleMap = {
+            safeboda: 'SafeBoda',
+            uber: 'Uber'
+        };
+          const label = titleMap[provider] || provider;
+          if (orderBtn) 
+          orderBtn.textContent = `Order ${label}`;
+          document.title = `ORCA PICKUP - ${label}`;
+          if (OrcaHeader) {
+              OrcaHeader.textContent = `ORCA PICKUP - ${label} `;
+              try { localStorage.setItem('orcaDropDown', provider); } catch (error) {}
+       }
+      }
+      orderButton(provider);
       // Start with school as pickup
       pickupAddress.value = SCHOOL_ADDRESS;
 
@@ -121,7 +144,7 @@
         childSelect.innerHTML = opts.join('');
       }).catch(err => {
         console.error('Failed to load studentsdata.csv', err);
-        childSelect.innerHTML = '<option value="">Failed to load students</option>';
+        childSelect.innerHTML = <option value="">Failed to load students</option>;
       });
 
       // when user picks a child, auto-fill addresses and phone
@@ -172,12 +195,13 @@
         }, 3000);
 
         // Optional: send order to backend (include parent phone if needed)
-        // fetch('/order-ride', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) });
+      // fetch('/order-ride', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) });
       });
     });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="schoolchildren-main.js" type="module"></script>
        <script src="dashboard.js"></script>
+       <script src="form-handler.js"></script>
 </body>
 </html>
