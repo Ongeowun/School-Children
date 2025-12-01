@@ -9,6 +9,9 @@
  const bcrypt = require('bcrypt');
  const config = require ('./config');
 
+ const UBER_API_KEY = config.uber.apiKey;
+ const UBER_BASE_URL = 'https://api.uber.com/v1.2';
+
  const app = express();
  app.use(express.json());
  app.use(cors({
@@ -358,16 +361,80 @@ app.get('/download-csv', (req, res) => {
   const filePath = 'data.csv';
   if(!fs.existsSync(filePath)){
     return res.status(404).json({error: 'CSV file not found'})
-  }
-  res.download(filePath, 'data.csv', (error) => {
+   }
+   res.download(filePath, 'data.csv', (error) => {
     if (error) {
       console.error('Error downloading CSV file', err);
       res.status(500).json({error: 'Downloading CSV file'})
     }
   })
 })
+ 
+//Uber API endpoint and requesting for rides.
+app.post('/request-Uber-ride', async (req, res) => {
+    try {
+      const { schoolLocation, parentsLocations, parentsContacts, studentName } = req.body;
+      if (!schoolLocation || !parentsLocations || !parentsContacts || !studentName) {
+        return res.status(400).json({ error: 'All fields are required' });
+      }
 
-// ...existing code...
+      // Make request to Uber API to estimate ride
+
+      const estimateResponse = await fetch(`${UBER_BASE_URL}/estimates/price`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${UBER_API_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          start_latitude: schoolLocation.latitude,
+          start_longitude: schoolLocation.longitude,
+          end_latitude: parentsLocations.latitude,
+          end_longitude: parentsLocations.longitude
+        })
+       });
+       //Ride prices
+      const priceData = await estimateResponse.json();
+      
+      const ridePrice = priceData.prices && priceData.prices.length > 0 ? priceData.prices[0].estimate : null;
+
+      //Ride duration and details
+      const durationResponse = await fetch(`${UBER_BASE_URL}/estimates/time`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${UBER_API_KEY}`,
+          'Content-Type': 'application/json'
+        },
+      });
+
+      const durationData = await durationResponse.json();
+      const duration = durationData.times && durationData.times.length > 0 ? durationData.times[0].estimate : null;
+
+      const rideDetails = {
+        studentName,
+        pickup: schoolLocation,
+        dropoff: parentsLocations,
+        contact: parentsContacts,
+        price: ridePrice,
+        duration: duration,
+        timestamp: new Date().toISOString()
+      };
+
+      fs.appendFileSync('uberRideDetails.json'), 
+        JSON.stringify(rideDetails) + '\n', 
+        'utf8';
+       
+      return res.json({
+        success: true,
+        rideDetails,
+        message: 'Uber ride requested successfully for ${firstName} ${lastName}'
+      });
+   } catch (err) {
+    console.error('Error requesting Uber ride:', err);
+    return res.status(500).json({ error: 'Failed to request Uber ride' });
+  }
+});
+
 
 // Start server with proper error handling
 const PORT = (config.server && config.server.port) || 5500;

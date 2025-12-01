@@ -20,7 +20,11 @@ const config = {
     authToken: process.env.TWILIO_AUTH_TOKEN || null,
     phoneNumber: process.env.TWILIO_PHONE_NUMBER || null
   },
-
+ 
+  // Uber configuration
+  uber: {
+    apiKey: process.env.UBER_API_KEY || null
+  },
   // File paths
   files: {
     dataFile: process.env.DATA_FILE || 'data.csv',

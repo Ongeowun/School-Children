@@ -46,8 +46,8 @@
       <input id="contactPhone" name="contactPhone" type="tel" required />
 
       <div class="form-actions">
-        <button type="submit" class="submitOrderBtn">Order Uber</button>
-        <a href="schoolchildren.html" class="loginBtn" style="background:#ccc;color:#000;margin-left:8px;text-decoration:none;display:inline-block;padding:10px 14px;border-radius:8px;">Back</a>
+        <button type="submit" class="submitOrderBtn"></button>
+        <button type="button" class="backBtn"><a href="schoolchildren.html" >Back</a></button>
       </div>
     </form>
   </main>
@@ -83,29 +83,26 @@
       const form = document.getElementById('orderForm');
       const orderBtn = document.querySelector('.submitOrderBtn');
       const OrcaHeader = document.querySelector('.OrcaPickUp');
+
      
       const params = new URLSearchParams(window.location.search);
       const provider = params.get('provider') || localStorage.getItem('orcaDropDown') || '';
 
       // Order Button according to the provider selected
-      
+
       function orderButton(provider) {
-         
-        if(!provider) return;
-        const titleMap = {
-            safeboda: 'SafeBoda',
-            uber: 'Uber'
-        };
-          const label = titleMap[provider] || provider;
-          if (orderBtn) 
-          orderBtn.textContent = `Order ${label}`;
+         const map = {
+             safeboda: 'SafeBoda',
+             uber: 'Uber'
+         };
+         const label = map[provider] || '';
+          if (orderBtn) orderBtn.textContent = `Order ${label}`;
+          if (OrcaHeader) OrcaHeader.textContent = `ORCA PICKUP - ${label}`;
           document.title = `ORCA PICKUP - ${label}`;
-          if (OrcaHeader) {
-              OrcaHeader.textContent = `ORCA PICKUP - ${label} `;
-              try { localStorage.setItem('orcaDropDown', provider); } catch (error) {}
-       }
+          try { localStorage.setItem('orcaDropDown', provider); } catch (error) {}
       }
-      orderButton(provider);
+      orderButton(provider)
+      
       // Start with school as pickup
       pickupAddress.value = SCHOOL_ADDRESS;
 
@@ -144,7 +141,7 @@
         childSelect.innerHTML = opts.join('');
       }).catch(err => {
         console.error('Failed to load studentsdata.csv', err);
-        childSelect.innerHTML = <option value="">Failed to load students</option>;
+        childSelect.innerHTML = '<option value="">Failed to load students</option>';
       });
 
       // when user picks a child, auto-fill addresses and phone
@@ -182,6 +179,35 @@
           contactPhone: contactPhone.value.trim()
         };
 
+        //If Uber was selected, send request to Uber API
+
+        if(provider === 'uber') {
+          fetch('http://localhost:5500/request-Uber-ride', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          })
+          .then(response => response.json())
+          .then(result => {
+            const label = `Uber ${res.ridePrice} ${res.duration}`;
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alertMessage';
+            alertDiv.style.display = 'block';
+            alertDiv.innerHTML = `<p>${label} ordered for ${data.childName}<br/>Time: ${new Date(data.pickupTime).toLocaleString()}</p>`;
+            document.body.appendChild(alertDiv);
+            console.log('Uber order request sent successfully:', result);
+
+            setTimeout(() => {
+              alertDiv.remove();
+              window.location.href = 'schoolchildren.html';
+            }, 10000);
+
+          })
+          .catch(error => {
+            console.error('Error sending Uber order request:', error);
+          });
+        }
+
         // show confirmation popup using .alertMessage
         const alertDiv = document.createElement('div');
         alertDiv.className = 'alertMessage';
@@ -199,9 +225,9 @@
       });
     });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="schoolchildren-main.js" type="module"></script>
-       <script src="dashboard.js"></script>
-       <script src="form-handler.js"></script>
+    <script src="dashboard.js" defer></script>
+    <script src="form-handler.js"defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
 </body>
 </html>
