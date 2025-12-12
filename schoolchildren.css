@@ -545,3 +545,85 @@ font-size: 1.5rem;
   box-sizing: border-box;
   background: aliceblue;
 }
+
+/* --- Mobile overrides for login page (≤420px and ≤360px) --- */
+html, body { 
+  height: 100%; 
+  margin: 0; 
+  padding: 0; 
+  -webkit-text-size-adjust: 100%; 
+}
+
+@media (max-width: 420px) {
+  .login-container { 
+    padding: 18px; 
+    max-width: 92%; 
+    width: 100%;
+    margin: 5vh auto;
+  }
+  .logoReg { 
+    font-size: 28px; 
+  }
+  .login { 
+    font-size: 16px; 
+  }
+  .login-container input[type="text"],
+  .login-container input[type="password"] { 
+    font-size: 0.98rem; 
+    padding: 11px 12px; 
+  }
+  .loginBtn { 
+    font-size: 0.98rem; 
+    padding: 11px; 
+    margin: 1em auto;
+    border-radius: 7px;
+  }
+  .linkText { 
+    font-size: 0.92rem; 
+  }
+}
+
+@media (max-width: 360px) {
+  .login-container { 
+    padding: 12px; 
+    width: 94%; 
+    margin: 4vh auto;
+  }
+  .logoReg { 
+    font-size: 24px; 
+  }
+  .login { 
+    font-size: 15px; 
+    margin-bottom: 12px;
+  }
+  .login-container input[type="text"],
+  .login-container input[type="password"] { 
+    font-size: 0.93rem; 
+    padding: 9px 10px; 
+  }
+  .loginBtn { 
+    font-size: 0.95rem; 
+    padding: 9px; 
+  }
+  .error { 
+    font-size: 0.85rem; 
+  }
+}
+
+@media (max-width: 320px) {
+  .logoReg { 
+    font-size: 22px; 
+  }
+  .login-container { 
+    padding: 10px; 
+  }
+  .login-container input[type="text"],
+  .login-container input[type="password"] { 
+    font-size: 0.9rem; 
+    padding: 8px 8px; 
+  }
+  .loginBtn { 
+    font-size: 0.9rem; 
+    padding: 8px; 
+  }
+}
