@@ -74,7 +74,7 @@ class FormHandler {
   }
 
   async saveToCSV(data) {
-    const response = await fetch('http://localhost:5500/submit-student-form', {
+    const response = await fetch('http://orca.backspace.ug/submit-student-form', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

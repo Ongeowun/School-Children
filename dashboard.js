@@ -74,8 +74,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Fetch data and initialize dropdown and charts
   Promise.all([
-    fetch('http://localhost:5500/get-data').then(r => r.json()),
-    fetch('http://localhost:5500/get-students').then(r => r.json())
+    fetch('http://orca.backspace.ug/get-data').then(r => r.json()),
+    fetch('http://orca.backspace.ug/get-students').then(r => r.json())
   ]).then(([data, students]) => {
       // Extract unique dates from data timestamps
       const uniqueDatesSet = new Set()

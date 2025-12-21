@@ -182,7 +182,7 @@
         //If Uber was selected, send request to Uber API
 
         if(provider === 'uber') {
-          fetch('http://localhost:5500/request-Uber-ride', {
+          fetch('http://orca.backspace.ug/request-Uber-ride', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)

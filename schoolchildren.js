@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const messageBody = pickUpName
             ? `Your child has been dropped at home and picked up by ${pickUpName}` 
             : 'Your child has been dropped at home'
-      fetch('http://localhost:5500/send-text', {
+      fetch('http://orca.backspace.ug/send-text', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

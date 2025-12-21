@@ -9,11 +9,11 @@
 
 const CONFIG = {
   API_ENDPOINTS: {
-    SEND_TEXT: 'http://localhost:5500/send-text',
-    SAVE_DATA: 'http://localhost:5500/save-data',
-    GET_DATA: 'http://localhost:5500/get-data',
-    DOWNLOAD_CSV: 'http://localhost:5500/download-csv',
-    GET_STUDENTS: 'http://localhost:5500/get-students'
+    SEND_TEXT: 'http://orca.backspace.ug/send-text',
+    SAVE_DATA: 'http://orca.backspace.ug/save-data',
+    GET_DATA: 'http://orca.backspace.ug/get-data',
+    DOWNLOAD_CSV: 'http://orca.backspace.ug/download-csv',
+    GET_STUDENTS: 'http://orca.backspace.ug/get-students'
   },
   PHONE_NUMBERS: {
     FROM: '+15075563406',
