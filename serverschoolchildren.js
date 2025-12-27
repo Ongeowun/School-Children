@@ -3,7 +3,7 @@
  const cors = require('cors');
  const bodyParser = require('body-parser');
  const fs = require('fs');
- const http = require('http');
+ const https = require('https');
  const path = require('path');
  //const {parse} = require('json2csv'); //Converts JSON to CSV
  const bcrypt = require('bcrypt');
@@ -15,7 +15,7 @@
  const app = express();
  app.use(express.json());
  app.use(cors({
-  origin: 'http://127.0.0.1:5500'
+  origin: 'https://127.0.0.1:5500'
  }));
 
 // Safe Twilio init (optional)
@@ -439,7 +439,7 @@ app.post('/request-Uber-ride', async (req, res) => {
 // Start server with proper error handling
 const PORT = (config.server && config.server.port) || 5500;
 const server = app.listen(PORT, () => {
-  console.log(`Server listening on http://localhost:${PORT}`);
+  console.log(`Server listening on https://localhost:${PORT}`);
 });
 
 server.on('error', (err) => {
