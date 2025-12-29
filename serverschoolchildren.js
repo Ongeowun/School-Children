@@ -15,7 +15,7 @@
  const app = express();
  app.use(express.json());
  app.use(cors({
-  origin: 'https://127.0.0.1:5500'
+  origin: 'https://orca.backspace.ug'
  }));
 
 // Safe Twilio init (optional)
