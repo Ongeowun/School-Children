@@ -27,7 +27,7 @@ if (process.env.PGSSLMODE === 'require') {
 
 // configure pool: default host is orca.backspace.ug unless PGHOST is set
 const pool = new Pool({
-  host: process.env.PGHOST || 'orca.backspace.ug',
+  host: process.env.PGHOST || 'https://orca.backspace.ug',
   port: process.env.PGPORT ? parseInt(process.env.PGPORT, 10) : 5432,
   user: process.env.PGUSER || 'school_admin',
   password: process.env.PGPASSWORD || '',
