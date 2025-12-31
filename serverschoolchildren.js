@@ -1,3 +1,5 @@
+0
+ const pool = require('./db');
 // const twilio = require('twilio');
  const express = require('express');
  const cors = require('cors');
@@ -14,6 +16,7 @@
 
  const app = express();
  app.use(express.json());
+
  app.use(cors({
   origin: 'https://orca.backspace.ug'
  }));
@@ -34,7 +37,7 @@ if (config.twilio && config.twilio.accountSid && config.twilio.authToken) {
 }
 
 
- const USERS_FILE = 'users.json';
+// const USERS_FILE = 'users.json';
  
 // Helper functions for user management
 function readUsers() {
