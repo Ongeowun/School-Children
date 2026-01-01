@@ -11,7 +11,7 @@ const config = {
   // Server configuration
   server: {
     port: process.env.PORT || 5500,
-    corsOrigin: process.env.CORS_ORIGIN || 'http://127.0.0.1:5500'
+    corsOrigin: process.env.CORS_ORIGIN || 'https://orca.backspace.ug'
   },
 
   // Twilio configuration
