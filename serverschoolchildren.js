@@ -6,6 +6,7 @@
  const https = require('https');
  const path = require('path');
  //const {parse} = require('json2csv'); //Converts JSON to CSV
+ const pool = require('./db'); // path to db.js
  const bcrypt = require('bcrypt');
  const config = require ('./config');
 
